@@ -1,5 +1,5 @@
-use actix_web::{delete, get, post, put, web};
 use actix_web::web::Query;
+use actix_web::{delete, get, post, put, web};
 
 use database::PgPool;
 
@@ -41,7 +41,6 @@ async fn get_stocks(
         }
     }
 }
-
 
 #[post("/")]
 async fn post_stock(

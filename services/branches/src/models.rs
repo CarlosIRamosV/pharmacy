@@ -18,13 +18,13 @@ pub struct Search {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct StockRequest {
-    pub product_id: i32,
-    pub branch_id: i32,
-    pub quantity: i32,
+pub struct BranchRequest {
+    pub name: String,
+    pub address: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct StockUpdate {
-    pub quantity: i32,
+pub struct BranchUpdate {
+    pub name: Option<String>,
+    pub address: Option<String>,
 }

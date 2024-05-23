@@ -4,9 +4,13 @@ import SelectBranch from "../../../components/SelectBranch.astro";
 ---
 
 <Layout title="Home">
-  <h1>Welcome to Astro</h1>
+  <h1>Lista de productos en stock</h1>
     <!-- Select the branch you want to see -->
   <SelectBranch/>
+
+  <ul>
+    <li><a href="/stocks/create">Create a new stock</a></li>
+    </ul>
 
   <!-- Search for a product -->
   <label for="search">
@@ -81,3 +85,5 @@ import SelectBranch from "../../../components/SelectBranch.astro";
     });
   }
 </script>
+
+-- Path: /manager/branches/index.astro --

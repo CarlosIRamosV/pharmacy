@@ -1,7 +1,7 @@
 use std::env::var;
 
 use dotenv::dotenv;
-use env_logger::{Env, init_from_env};
+use env_logger::{init_from_env, Env};
 
 pub fn load_env() {
     log::info!("Loading .env file");

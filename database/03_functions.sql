@@ -3,6 +3,54 @@
 /* Products */
 
 /* Branches */
+CREATE FUNCTION logs.fn_branches_trigger() RETURNS TRIGGER AS
+$$
+BEGIN
+    IF (TG_OP = 'INSERT') THEN
+        INSERT INTO logs.branches (action, branch_id, name, address)
+        VALUES ('INSERT', NEW.id, NEW.name, NEW.address);
+    ELSIF (TG_OP = 'UPDATE') THEN
+        INSERT INTO logs.branches (action, branch_id, name, address)
+        VALUES ('UPDATE', NEW.id, NEW.name, NEW.address);
+    ELSIF (TG_OP = 'DELETE') THEN
+        INSERT INTO logs.branches (action, branch_id, name, address)
+        VALUES ('DELETE', OLD.id, OLD.name, OLD.address);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Insert branch and return the branch
+CREATE FUNCTION fn_branches_insert(p_name VARCHAR(100), p_address VARCHAR(100))
+    RETURNS TABLE
+            (
+                id         INTEGER,
+                name       VARCHAR(100),
+                address    VARCHAR(100),
+                created_at TIMESTAMP,
+                updated_at TIMESTAMP
+            )
+AS
+$$
+DECLARE
+    v_branch branches%ROWTYPE;
+BEGIN
+    INSERT INTO branches (name, address)
+    VALUES (p_name, p_address)
+    RETURNING * INTO v_branch;
+
+    RETURN QUERY
+        SELECT b.id,
+               b.name,
+               b.address,
+               b.created_at,
+               b.updated_at
+        FROM branches b
+        WHERE b.id = v_branch.id;
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 /* Stocks */
 -- Trigger function

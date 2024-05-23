@@ -1,7 +1,7 @@
 use actix_cors::Cors;
-use actix_web::{App, HttpServer};
 use actix_web::middleware::Logger;
 use actix_web::web::Data;
+use actix_web::{App, HttpServer};
 
 use common::{init_logger, load_bind, load_bind_ipv6, load_env};
 use database::create_pool;
@@ -41,8 +41,8 @@ async fn main() -> std::io::Result<()> {
             // Load the routes
             .configure(routes::load_routes)
     })
-        .bind(load_bind())?
-        .bind(load_bind_ipv6())?
-        .run()
-        .await
+    .bind(load_bind())?
+    .bind(load_bind_ipv6())?
+    .run()
+    .await
 }
