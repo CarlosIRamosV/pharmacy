@@ -1,0 +1,26 @@
+---
+
+---
+
+<label>
+    <select id="branch" name="branch">
+    </select>
+</label>
+
+
+<script>
+    fetch('http://localhost/api/branches')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(element => {
+                document.getElementById('branch').innerHTML += `<option value="${element.id}">${element.name}</option>`;
+            });
+            if (sessionStorage.getItem('branch')) {
+                document.getElementById('branch').value = sessionStorage.getItem('branch');
+            }
+        });
+
+    document.getElementById('branch').addEventListener('change', function() {
+        sessionStorage.setItem('branch', this.value);
+    });
+</script>

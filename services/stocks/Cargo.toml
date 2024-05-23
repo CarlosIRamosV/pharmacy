@@ -1,0 +1,18 @@
+[package]
+name = "stocks"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-cors.workspace = true
+actix-web.workspace = true
+chrono.workspace = true
+common.workspace = true
+database.workspace = true
+log.workspace = true
+postgres.workspace = true
+postgres-from-row.workspace = true
+rust_decimal.workspace = true
+r2d2_postgres.workspace = true
+serde.workspace = true
+

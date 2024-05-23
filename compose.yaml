@@ -1,0 +1,102 @@
+name: pharmacy
+services:
+  client:
+    container_name: Client
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    image: pharmacy/client:latest
+    restart: always
+
+  api:
+    container_name: API_Gateway
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    links:
+      - branches
+      - client
+      - products
+      - stocks
+
+  db:
+    container_name: Database
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      #     - type: volume
+      #       source: data
+      #       target: /var/lib/postgresql/data
+      - type: bind
+        source: ./database/
+        target: /docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  branches:
+    container_name: Branches
+    build:
+      context: .
+      dockerfile: services/branches/Dockerfile
+    image: pharmacy/branches:latest
+    restart: always
+    environment:
+      PG_HOST: db
+      PG_USER: branches_user
+      PG_PASSWORD: branches_password
+      PG_DBNAME: pharmacy
+    depends_on:
+      db:
+        condition: service_healthy
+    links:
+      - db
+
+  products:
+    container_name: Products
+    build:
+      context: .
+      dockerfile: services/products/Dockerfile
+    image: pharmacy/products:latest
+    restart: always
+    environment:
+      PG_HOST: db
+      PG_USER: products_user
+      PG_PASSWORD: products_password
+      PG_DBNAME: pharmacy
+    depends_on:
+      db:
+        condition: service_healthy
+    links:
+      - db
+
+  stocks:
+    container_name: Stocks
+    build:
+      context: .
+      dockerfile: services/stocks/Dockerfile
+    image: pharmacy/stocks:latest
+    restart: always
+    environment:
+      PG_HOST: db
+      PG_USER: stocks_user
+      PG_PASSWORD: stocks_password
+      PG_DBNAME: pharmacy
+    depends_on:
+      db:
+        condition: service_healthy
+    links:
+      - db
+
+
+
+volumes:
+  data:
