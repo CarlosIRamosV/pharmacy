@@ -44,10 +44,8 @@ pub async fn start(app_name: &str, routes: fn(&mut ServiceConfig)) -> std::io::R
             )
             // Pass the database pool to the application
             .app_data(Data::new(pool.clone()))
-
             // Health check route
             .service(health)
-
             // Load the routes
             .configure(routes)
     })
