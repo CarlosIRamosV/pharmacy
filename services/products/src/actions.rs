@@ -12,6 +12,7 @@ pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box
     let conn = pool.get().await.unwrap();
 
     let products = if search.name.is_some()
+        || search.description.is_some()
         || search.branch_id.is_some()
         || search.min_price.is_some()
         || search.max_price.is_some()
@@ -22,6 +23,7 @@ pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box
         let mut count = 1;
 
         if search.name.is_some()
+            || search.description.is_some()
             || search.branch_id.is_some()
             || search.min_price.is_some()
             || search.max_price.is_some()
@@ -31,6 +33,14 @@ pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box
 
         if let Some(name) = &search.name {
             query.push_str(&format!(" name LIKE '%{}%'", name));
+            count += 1;
+        }
+
+        if let Some(description) = &search.description {
+            if count > 1 {
+                query.push_str(" AND");
+            }
+            query.push_str(&format!(" description LIKE '%{}%'", description));
             count += 1;
         }
 

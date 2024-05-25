@@ -16,6 +16,7 @@ pub struct Product {
 #[derive(Debug, Deserialize)]
 pub struct Search {
     pub name: Option<String>,
+    pub description: Option<String>,
     pub min_price: Option<Decimal>,
     pub max_price: Option<Decimal>,
     pub branch_id: Option<i32>,
