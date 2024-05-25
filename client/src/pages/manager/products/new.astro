@@ -1,6 +1,6 @@
 ---
-
-import Layout from "../../../layouts/Layout.astro";---
+import Layout from "../../../layouts/Layout.astro";
+---
 
 <Layout title="Crear una nueva sucursal">
   <h1>Crear una nueva sucursal</h1>
@@ -10,35 +10,34 @@ import Layout from "../../../layouts/Layout.astro";---
     <label for="description">Descripción</label>
     <input type="text" id="description" name="description" required />
     <label for="price">Precio</label>
-   <!-- number whit decimal -->
+    <!-- number whit decimal -->
     <input type="number" id="price" name="price" step="0.01" required />
     <button type="submit">Crear</button>
   </form>
 </Layout>
 
 <script>
-    document.querySelector('form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const name = document.querySelector('#name').value;
-        const description = document.querySelector('#description').value;
-        const price = document.querySelector('#price').value;
+  document.querySelector("form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const name = document.querySelector("#name").value;
+    const description = document.querySelector("#description").value;
+    const price = document.querySelector("#price").value;
 
-      console.log(JSON.stringify({ name, description, price }));
+    console.log(JSON.stringify({ name, description, price }));
 
-
-        //const response = await fetch('/api/branches', {
-      const response = await fetch('http://localhost/api/products/', {
-      method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, description, price }),
-        });
-        if (response.ok) {
-        alert('Producto creado correctamente');
-        window.location.href = './';
-        } else {
-        alert('Error al crear el producto');
-        }
+    //const response = await fetch('/api/branches', {
+    const response = await fetch("http://localhost/api/products/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, description, price }),
     });
+    if (response.ok) {
+      alert("Producto creado correctamente");
+      window.location.href = "./";
+    } else {
+      alert("Error al crear el producto");
+    }
+  });
 </script>

@@ -19,7 +19,6 @@ pub struct Search {
     pub description: Option<String>,
     pub min_price: Option<Decimal>,
     pub max_price: Option<Decimal>,
-    pub branch_id: Option<i32>,
     pub limit: Option<i64>,
     pub offset: Option<i64>,
 }

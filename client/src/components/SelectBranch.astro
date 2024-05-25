@@ -3,29 +3,30 @@
 ---
 
 <label>
-    <select id="branch" name="branch">
-        <option value="">Select Branch</option>
-    </select>
+  <select id="branch" name="branch">
+    <option value="">Select Branch</option>
+  </select>
 </label>
 
-
 <script>
-    fetch('http://localhost/api/branches')
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(element => {
-                document.getElementById('branch').innerHTML += `<option value="${element.id}">${element.name}</option>`;
-            });
-            if (sessionStorage.getItem('branch')) {
-                document.getElementById('branch').value = sessionStorage.getItem('branch');
-            }
-        });
-
-    document.getElementById('branch').addEventListener('change', function() {
-        if (this.value === '') {
-            sessionStorage.removeItem('branch');
-            return;
-        }
-        sessionStorage.setItem('branch', this.value);
+  fetch("http://localhost/api/branches")
+    .then((response) => response.json())
+    .then((data) => {
+      data.forEach((element) => {
+        document.getElementById("branch").innerHTML +=
+          `<option value="${element.id}">${element.name}</option>`;
+      });
+      if (sessionStorage.getItem("branch")) {
+        document.getElementById("branch").value =
+          sessionStorage.getItem("branch");
+      }
     });
+
+  document.getElementById("branch").addEventListener("change", function () {
+    if (this.value === "") {
+      sessionStorage.removeItem("branch");
+      return;
+    }
+    sessionStorage.setItem("branch", this.value);
+  });
 </script>

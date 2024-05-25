@@ -46,13 +46,3 @@ GRANT INSERT, SELECT
 GRANT USAGE, SELECT
     ON SEQUENCE logs.products_id_seq
     TO products_user;
-
-
-/* Create schema */
-CREATE USER stocks_user WITH LOGIN PASSWORD 'stocks_password';
-GRANT INSERT, SELECT, UPDATE, DELETE
-    ON ALL TABLES IN SCHEMA public
-    TO stocks_user;
-GRANT USAGE, SELECT
-    ON ALL SEQUENCES IN SCHEMA public
-    TO stocks_user;

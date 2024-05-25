@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["services/branches", "services/libs/common", "services/libs/database", "services/products", "services/stocks"]
+members = ["services/branches", "services/libs/common", "services/libs/database", "services/products"]
 
 # Dependencies for the project
 [workspace.dependencies]

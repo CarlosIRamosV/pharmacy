@@ -13,18 +13,17 @@ pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box
 
     let products = if search.name.is_some()
         || search.description.is_some()
-        || search.branch_id.is_some()
         || search.min_price.is_some()
         || search.max_price.is_some()
         || search.limit.is_some()
         || search.offset.is_some()
     {
         let mut query = "SELECT * FROM products_view".to_string();
+        let join : String;
         let mut count = 1;
 
         if search.name.is_some()
             || search.description.is_some()
-            || search.branch_id.is_some()
             || search.min_price.is_some()
             || search.max_price.is_some()
         {
@@ -41,14 +40,6 @@ pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box
                 query.push_str(" AND");
             }
             query.push_str(&format!(" description LIKE '%{}%'", description));
-            count += 1;
-        }
-
-        if let Some(branch_id) = search.branch_id {
-            if count > 1 {
-                query.push_str(" AND");
-            }
-            query.push_str(&format!(" branch_id = {}", branch_id));
             count += 1;
         }
 

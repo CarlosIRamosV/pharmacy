@@ -19,14 +19,3 @@ CREATE TABLE logs.branches
     address    VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );
-
-CREATE TABLE logs.stocks
-(
-    id         SERIAL PRIMARY KEY,
-    action     VARCHAR(100) NOT NULL,
-    stock_id   INTEGER      NOT NULL,
-    product_id INTEGER      NOT NULL,
-    branch_id  INTEGER      NOT NULL,
-    quantity   INTEGER      NOT NULL,
-    created_at TIMESTAMP DEFAULT NOW()
-);

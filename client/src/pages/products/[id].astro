@@ -1,0 +1,37 @@
+---
+import Layout from "../../layouts/Layout.astro";
+const { id } = Astro.params;
+---
+
+<Layout title="Product">
+  <h1>Product</h1>
+  <div>
+    <h2 id="product-name">Product Name</h2>
+    <p id="product-description">Product Description</p>
+    <p id="product-price">Product Price</p>
+    <img
+      src=""
+      id="product-image"
+      alt="Product Image"
+      width="200"
+      height="200"
+    />
+
+    <p id="product-id">{{ id }}</p>
+  </div>
+</Layout>
+
+<script define:vars={{ id }}>
+  fetch("http://localhost/api/products/" + id)
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("product-name").innerText = data.name;
+      document.getElementById("product-description").innerText =
+        data.description;
+      document.getElementById("product-price").innerText = data.price;
+      document.getElementById("product-id").innerText = data.id;
+      document.getElementById("product-image").src =
+        "https://via.placeholder.com/150";
+      document.getElementById("product-image").alt = data.name;
+    });
+</script>

@@ -1,22 +1,27 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import SelectBranch from "../../../components/SelectBranch.astro";
 ---
 
 <Layout title="Lista de productos">
-  <h1>Lista de productos en stock</h1>
-    <!-- Select the branch you want to see -->
-  <SelectBranch/>
-
+  <h1>Lista de productos</h1>
   <ul>
     <li><a href="./new">Add a new product</a></li>
-    </ul>
+  </ul>
 
-    <!-- Search form -->
+  <!-- Search form -->
   <form>
     <!-- Name -->
-    <label for="search">Search by name</label>
-    <input type="text" id="search" name="search" placeholder="Search by name">
+    <label for="name">Search by name</label>
+    <input type="text" id="name" name="name" placeholder="Search by name" />
+
+    <!-- Description -->
+    <label for="description">Search by description</label>
+    <input
+      type="text"
+      id="description"
+      name="description"
+      placeholder="Search by description"
+    />
 
     <!-- Limit -->
     <label for="limit">Limit</label>
@@ -29,110 +34,121 @@ import SelectBranch from "../../../components/SelectBranch.astro";
 
     <!-- Pagination -->
     <label for="page">Page</label>
-    <input type="number" id="page" name="page" value="1">
+    <input type="number" id="page" name="page" value="1" />
 
     <!-- Min price -->
     <label for="min_price">Min price</label>
-    <input type="number" id="min_price" name="min_price" placeholder="Min price">
+    <input
+      type="number"
+      id="min_price"
+      name="min_price"
+      placeholder="Min price"
+    />
 
     <!-- Max price -->
     <label for="max_price">Max price</label>
-    <input type="number" id="max_price" name="max_price" placeholder="Max price">
+    <input
+      type="number"
+      id="max_price"
+      name="max_price"
+      placeholder="Max price"
+    />
   </form>
 
-
-    <!-- Table -->
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody id="products">
-        </tbody>
-    </table>
+  <!-- Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="products"> </tbody>
+  </table>
 </Layout>
 
 <script>
-  let nameSearch = document.getElementById('search');
-    let limit = document.getElementById('limit');
-    let page = document.getElementById('page');
-    let minPrice = document.getElementById('min_price');
-    let maxPrice = document.getElementById('max_price');
+  let name = document.getElementById("name");
+  let description = document.getElementById("description");
+  let limit = document.getElementById("limit");
+  let page = document.getElementById("page");
+  let minPrice = document.getElementById("min_price");
+  let maxPrice = document.getElementById("max_price");
 
-    nameSearch.addEventListener('input', loadTable);
+  name.addEventListener("input", loadTable);
 
-    limit.addEventListener('change', loadTable);
+  description.addEventListener("input", loadTable);
 
-    page.addEventListener('input', loadTable);
+  limit.addEventListener("change", loadTable);
 
-    minPrice.addEventListener('input', loadTable);
+  page.addEventListener("input", loadTable);
 
-    maxPrice.addEventListener('input', loadTable);
+  minPrice.addEventListener("input", loadTable);
+
+  maxPrice.addEventListener("input", loadTable);
 
   function loadTable() {
-    if (minPrice.value && maxPrice.value && parseInt(minPrice.value) > parseInt(maxPrice.value)) {
-      alert('Min price must be lower than max price');
+    if (
+      minPrice.value &&
+      maxPrice.value &&
+      parseInt(minPrice.value) > parseInt(maxPrice.value)
+    ) {
+      alert("Min price must be lower than max price");
       return;
     }
 
-    let url = 'http://localhost/api/products/';
+    let url = "http://localhost/api/products/";
     let count = 0;
-    if (sessionStorage.getItem('branch')) {
-      url += '?branch_id=' + sessionStorage.getItem('branch');
+
+    if (name.value) {
+      url += count > 0 ? "&" : "?";
+      url += "name=" + name.value;
       count++;
     }
 
-    if (nameSearch.value) {
-      url += count > 0 ? '&' : '?';
-      url += 'name=' + nameSearch.value;
+    if (description.value) {
+      url += count > 0 ? "&" : "?";
+      url += "description=" + description.value;
       count++;
     }
 
     if (minPrice.value) {
-      url += count > 0 ? '&' : '?';
-      url += 'min_price=' + minPrice.value;
+      url += count > 0 ? "&" : "?";
+      url += "min_price=" + minPrice.value;
       count++;
     }
 
     if (maxPrice.value) {
-      url += count > 0 ? '&' : '?';
-      url += 'max_price=' + maxPrice.value;
-      count++;
-    }
-
-    if (sessionStorage.getItem('branch')) {
-      url += count > 0 ? '&' : '?';
-      url += 'branch_id=' + sessionStorage.getItem('branch');
+      url += count > 0 ? "&" : "?";
+      url += "max_price=" + maxPrice.value;
       count++;
     }
 
     if (limit.value) {
-      url += count > 0 ? '&' : '?';
-      url += 'limit=' + limit.value;
+      url += count > 0 ? "&" : "?";
+      url += "limit=" + limit.value;
       count++;
     }
 
     if (page.value) {
-      url += count > 0 ? '&' : '?';
-      url += 'offset=' + (page.value - 1) * limit.value;
+      url += count > 0 ? "&" : "?";
+      url += "offset=" + (page.value - 1) * limit.value;
       count++;
     }
 
     fetch(url)
-        .then(response => response.json())
-        .then(renderTable);
-    }
+      .then((response) => response.json())
+      .then(renderTable);
+  }
 
   function renderTable(data) {
-    let table = document.getElementById('products');
-    table.innerHTML = '';
-    data.forEach(product => {
-      let row = document.createElement('tr');
+    let table = document.getElementById("products");
+    table.innerHTML = "";
+    data.forEach((product) => {
+      let row = document.createElement("tr");
       row.innerHTML = `
         <td>${product.id}</td>
         <td>${product.name}</td>

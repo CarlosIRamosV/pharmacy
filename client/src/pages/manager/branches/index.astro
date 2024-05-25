@@ -1,39 +1,39 @@
 ---
+import Layout from "../../../layouts/Layout.astro";
+---
 
-import Layout from "../../../layouts/Layout.astro";---
 <Layout title="Lista de Sucursales">
-    <h1>Lista de Sucursales</h1>
-    <p>Esta es la lista de sucursales</p>
+  <h1>Lista de Sucursales</h1>
+  <p>Esta es la lista de sucursales</p>
 
-    <!-- Crear una nueva sucursal -->
-    <a href="/manager/branches/new">Crear nueva sucursal</a>
+  <!-- Crear una nueva sucursal -->
+  <a href="/manager/branches/new">Crear nueva sucursal</a>
 
-    <!-- Tabla de sucursales -->
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Dirección</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="branches">
-
-        </tbody>
-    </table>
-
+  <!-- Tabla de sucursales -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Dirección</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="branches"> </tbody>
+  </table>
 </Layout>
 
 <script>
-    // Cargar las sucursales
-    fetch("http://localhost/api/branches")
-        .then(response => response.json())
-        .then(data => {
-            const branches = document.getElementById("branches");
-            branches.innerHTML = "";
-            data.forEach(branch => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
+  // Cargar las sucursales
+  fetch("http://localhost/api/branches")
+    .then((response) => response.json())
+    .then((data) => {
+      const branches = document.getElementById("branches");
+      branches.innerHTML = "";
+      data.forEach((branch) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+                    <td>${branch.id}</td>
                     <td>${branch.name}</td>
                     <td>${branch.address}</td>
                     <td>
@@ -45,8 +45,7 @@ import Layout from "../../../layouts/Layout.astro";---
                         <a href="/manager/branches/${branch.id}/delete">Eliminar</a>
                     </td>
                 `;
-                branches.appendChild(tr);
-            });
-        });
+        branches.appendChild(tr);
+      });
+    });
 </script>
-

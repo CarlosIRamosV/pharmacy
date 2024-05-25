@@ -1,0 +1,27 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout title="Tienda de medicamentos">
+  <h1>Tienda de medicamentos</h1>
+
+  <div id="medicines"></div>
+</Layout>
+
+<script>
+  fetch("http://localhost/api/products")
+    .then((response) => response.json())
+    .then((data) => {
+      const medicines = document.getElementById("medicines");
+      data.forEach((medicine) => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+                <h2>${medicine.name}</h2>
+                <p>${medicine.description}</p>
+                <img src="https://via.placeholder.com/150" alt="${medicine.name}" />
+                <p>${medicine.price}</p>
+            `;
+        medicines.appendChild(div);
+      });
+    });
+</script>
