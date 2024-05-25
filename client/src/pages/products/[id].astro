@@ -1,9 +1,11 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
 const { id } = Astro.params;
 ---
 
 <Layout title="Product">
+  <Navbar />
   <h1>Product</h1>
   <div>
     <h2 id="product-name">Product Name</h2>

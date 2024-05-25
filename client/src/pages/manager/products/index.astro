@@ -1,8 +1,10 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import NavbarManager from "../../../components/NavbarManager.astro";
 ---
 
 <Layout title="Lista de productos">
+  <NavbarManager />
   <h1>Lista de productos</h1>
   <ul>
     <li><a href="./new">Add a new product</a></li>
@@ -56,17 +58,29 @@ import Layout from "../../../layouts/Layout.astro";
   </form>
 
   <!-- Table -->
-  <table>
-    <thead>
+  <table
+    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+  >
+    <thead
+      class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+    >
       <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>Action</th>
+        <th class="px-6 py-3">ID</th>
+        <th class="px-6 py-3">Name</th>
+        <th class="px-6 py-3">Description</th>
+        <th class="px-6 py-3">Price</th>
+        <th class="px-6 py-3">
+          <span class="sr-only">Seleccionar</span>
+        </th>
+        <th class="px-6 py-3">
+          <span class="sr-only">Editar</span>
+        </th>
+        <th class="px-6 py-3">
+          <span class="sr-only">Eliminar</span>
+        </th>
       </tr>
     </thead>
-    <tbody id="products"> </tbody>
+    <tbody id="products"></tbody>
   </table>
 </Layout>
 
@@ -149,15 +163,21 @@ import Layout from "../../../layouts/Layout.astro";
     table.innerHTML = "";
     data.forEach((product) => {
       let row = document.createElement("tr");
+      row.className =
+        "odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700";
       row.innerHTML = `
-        <td>${product.id}</td>
-        <td>${product.name}</td>
-        <td>${product.description}</td>
-        <td>${product.price}</td>
-        <td>
-          <a href="/products/${product.id}">View</a>
-            <a href="./${product.id}/edit">Edit</a>
-            <a href="./${product.id}/delete">Delete</a>
+        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${product.id}</td>
+        <td class="px-6 py-4">${product.name}</td>
+        <td class="px-6 py-4">${product.description}</td>
+        <td class="px-6 py-4">${product.price}</td>
+        <td class="px-6 py-4">
+          <a href="/products/${product.id}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
+        </td>
+        <td class="px-6 py-4 text-right">
+          <a href="./${product.id}/edit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+        </td>
+        <td class="px-6 py-4 text-right">
+          <a href="./${product.id}/delete" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
         </td>
       `;
       table.appendChild(row);

@@ -1,9 +1,11 @@
 ---
 import Layout from "../../../../layouts/Layout.astro";
+import NavbarManager from "../../../../components/NavbarManager.astro";
 const id = Astro.params.id;
 ---
 
 <Layout title="Modificar Producto">
+  <NavbarManager />
   <h1>Modificar Producto</h1>
   <p>Id: {id}</p>
   <form>

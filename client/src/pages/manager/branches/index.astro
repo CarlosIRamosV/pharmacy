@@ -1,51 +1,187 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import NavbarManager from "../../../components/NavbarManager.astro";
 ---
 
 <Layout title="Lista de Sucursales">
-  <h1>Lista de Sucursales</h1>
-  <p>Esta es la lista de sucursales</p>
-
-  <!-- Crear una nueva sucursal -->
-  <a href="/manager/branches/new">Crear nueva sucursal</a>
-
-  <!-- Tabla de sucursales -->
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Dirección</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody id="branches"> </tbody>
-  </table>
+  <NavbarManager />
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <div class="pb-4 bg-white dark:bg-gray-900">
+      <label for="table-search" class="sr-only">Nombre de la sucursal</label>
+      <div class="relative mt-1">
+        <div
+          class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none"
+        >
+          <svg
+            class="w-4 h-4 text-gray-500 dark:text-gray-400"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"></path>
+          </svg>
+        </div>
+        <input
+          type="text"
+          id="table-search"
+          class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Search for items"
+        />
+      </div>
+    </div>
+    <table
+      class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+    >
+      <thead
+        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+      >
+        <tr>
+          <th class="px-6 py-3">ID</th>
+          <th class="px-6 py-3">Nombre</th>
+          <th class="px-6 py-3">Dirección</th>
+          <th class="px-6 py-3">
+            <span class="sr-only">Seleccionar</span>
+          </th>
+          <th class="px-6 py-3">
+            <span class="sr-only">Editar</span>
+          </th>
+          <th class="px-6 py-3">
+            <span class="sr-only">Eliminar</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="branches"> </tbody>
+    </table>
+    <nav
+      class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
+      aria-label="Table navigation"
+    >
+      <span
+        class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto"
+        >Showing <span class="font-semibold text-gray-900 dark:text-white"
+          >1-10</span
+        > of <span class="font-semibold text-gray-900 dark:text-white"
+          >1000</span
+        ></span
+      >
+      <ul
+        class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8"
+        id="pagination"
+      >
+      </ul>
+    </nav>
+  </div>
 </Layout>
 
 <script>
   // Cargar las sucursales
-  fetch("http://localhost/api/branches")
-    .then((response) => response.json())
-    .then((data) => {
-      const branches = document.getElementById("branches");
-      branches.innerHTML = "";
-      data.forEach((branch) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-                    <td>${branch.id}</td>
-                    <td>${branch.name}</td>
-                    <td>${branch.address}</td>
-                    <td>
-                        <a href="#" onclick="{
-                            sessionStorage.setItem('branchId', ${branch.id});
-                            alert('Se ha seleccionado la sucursal ${branch.name}');
-                        }">Seleccionar</a>
-                        <a href="/manager/branches/${branch.id}/edit">Editar</a>
-                        <a href="/manager/branches/${branch.id}/delete">Eliminar</a>
-                    </td>
-                `;
-        branches.appendChild(tr);
+  let numPages = 1;
+
+  function renderBranches() {
+    console.log(numPages);
+    fetch(
+      "http://localhost/api/branches?limit=10&offset=" + (numPages - 1) * 10,
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const branches = document.getElementById("branches");
+        branches.innerHTML = "";
+        data.forEach((branch) => {
+          const tr = document.createElement("tr");
+          tr.className =
+            "bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600";
+          tr.innerHTML = `
+            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${branch.id}</td>
+            <td class="px-6 py-3">${branch.name}</td>
+            <td class="px-6 py-3">${branch.address}</td>
+            <td class="px-6 py-4 text-right">
+              <a href="#" onclick="{
+                sessionStorage.setItem('branchId', ${branch.id});
+                alert('Se ha seleccionado la sucursal ${branch.name}');
+                }"
+              class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Seleccionar</a>
+            </td>
+            <td class="px-6 py-4 text-right">
+              <a href="/manager/branches/${branch.id}/edit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
+            </td>
+            <td class="px-6 py-4 text-right">
+              <a href="/manager/branches/${branch.id}/delete" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Eliminar</a>
+            </td>
+          `;
+          branches.appendChild(tr);
+        });
       });
+  }
+
+  // Buscar sucursales
+  const searchInput = document.getElementById("table-search");
+  searchInput.addEventListener("input", (e) => {
+    const search = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll("tbody tr");
+    rows.forEach((row) => {
+      const text = row.innerText.toLowerCase();
+      row.style.display = text.includes(search) ? "" : "none";
     });
+  });
+
+  // Paginación
+  const pagination = document.getElementById("pagination");
+  pagination.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (e.target.tagName === "A") {
+      const page = e.target.innerText;
+      if (page === "Previous") {
+        numPages--;
+      } else if (page === "Next") {
+        numPages++;
+      } else {
+        numPages = parseInt(page);
+      }
+      renderBranches();
+      renderPagination();
+    }
+  });
+
+  function renderPagination() {
+    pagination.innerHTML = "";
+    let start = numPages > 1 ? numPages - 1 : 1;
+
+    if (numPages > 1) {
+      pagination.innerHTML += `
+            <li>
+                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+            </li>
+        `;
+    }
+    for (let i = start; i <= numPages + 4; i++) {
+      let active =
+        i === numPages ? "text-blue-600 border-blue-300 bg-blue-50" : "";
+      if (i === numPages) {
+        pagination.innerHTML += `
+            <li>
+                <a href="#" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">${i}</a>
+            </li>
+        `;
+      } else {
+        pagination.innerHTML += `
+            <li>
+                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${active}">${i}</a>
+            </li>
+        `;
+      }
+    }
+    pagination.innerHTML += `
+                <li>
+                    <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                </li>
+            `;
+  }
+  renderBranches();
+  renderPagination();
 </script>

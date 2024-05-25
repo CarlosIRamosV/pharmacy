@@ -1,11 +1,13 @@
 ---
 import Layout from "../../../../layouts/Layout.astro";
 import { req } from "astro/dist/core/messages";
+import NavbarManager from "../../../../components/NavbarManager.astro";
 
 const id = Astro.params.id;
 ---
 
 <Layout title="Eliminar sucursal">
+  <NavbarManager />
   <h1>Eliminar sucursal</h1>
   <p>¿Estás seguro de que deseas eliminar la sucursal?</p>
   <p>Nombre:</p>
