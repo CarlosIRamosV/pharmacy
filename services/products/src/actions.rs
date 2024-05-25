@@ -8,14 +8,24 @@ use database::PgPool;
 use crate::models::{Product, Request, Search, Update};
 use crate::utils::rows_to_products;
 
-pub async fn get_all_products(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box<dyn Error>> {
+pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
 
-    let stocks = if search.name.is_some() || search.branch_id.is_some() || search.min_price.is_some() || search.max_price.is_some() || search.limit.is_some() || search.offset.is_some() {
+    let products = if search.name.is_some()
+        || search.branch_id.is_some()
+        || search.min_price.is_some()
+        || search.max_price.is_some()
+        || search.limit.is_some()
+        || search.offset.is_some()
+    {
         let mut query = "SELECT * FROM products_view".to_string();
         let mut count = 1;
 
-        if search.name.is_some() || search.branch_id.is_some() || search.min_price.is_some() || search.max_price.is_some() {
+        if search.name.is_some()
+            || search.branch_id.is_some()
+            || search.min_price.is_some()
+            || search.max_price.is_some()
+        {
             query.push_str(" WHERE");
         }
 
@@ -60,27 +70,27 @@ pub async fn get_all_products(pool: &PgPool, search: &Search) -> Result<Vec<Prod
                 .query(&query, &[])
                 .map(|rows: Vec<Row>| rows_to_products(rows))
         })
-            .await?
+        .await?
     } else {
         conn.interact(|client| {
             client
                 .query("SELECT * FROM products_view;", &[])
                 .map(|rows: Vec<Row>| rows_to_products(rows))
         })
-            .await?
+        .await?
     };
-    match stocks {
-        Ok(stocks) => Ok(stocks),
+    match products {
+        Ok(products) => Ok(products),
         Err(err) => Err(Box::new(err)),
     }
 }
 
-pub async fn get_product(pool: &PgPool, product_id: i32) -> Result<Product, Box<dyn Error>> {
+pub async fn get(pool: &PgPool, id: i32) -> Result<Product, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
     let product = conn
         .interact(move |client| {
             client
-                .query_one("SELECT * FROM products_view WHERE id = $1;", &[&product_id])
+                .query_one("SELECT * FROM products_view WHERE id = $1;", &[&id])
                 .map(|row| Product::from_row(&row))
         })
         .await?;
@@ -90,14 +100,14 @@ pub async fn get_product(pool: &PgPool, product_id: i32) -> Result<Product, Box<
     }
 }
 
-pub async fn create_product(pool: &PgPool, product: Request) -> Result<Product, Box<dyn Error>> {
+pub async fn create(pool: &PgPool, request: Request) -> Result<Product, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
     let product = conn
         .interact(move |client| {
             client
                 .query_one(
-                    "SELECT * FROM fn_products_insert($1, $2, $3);",
-                    &[&product.name, &product.description, &product.price],
+                    "SELECT * FROM fn_create_product($1, $2, $3);",
+                    &[&request.name, &request.description, &request.price],
                 )
                 .map(|row| Product::from_row(&row))
         })
@@ -108,19 +118,19 @@ pub async fn create_product(pool: &PgPool, product: Request) -> Result<Product, 
     }
 }
 
-pub async fn update_product(pool: &PgPool, product_id: i32, product: Update) -> Result<Product, Box<dyn Error>> {
+pub async fn update(pool: &PgPool, id: i32, update: Update) -> Result<Product, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
     let product = conn
         .interact(move |client| {
             let mut query = "UPDATE products SET".to_string();
             let mut count = 1;
 
-            if let Some(name) = &product.name {
+            if let Some(name) = &update.name {
                 query.push_str(&format!(" name = '{}'", name));
                 count += 1;
             }
 
-            if let Some(description) = &product.description {
+            if let Some(description) = &update.description {
                 if count > 1 {
                     query.push_str(",");
                 }
@@ -128,7 +138,7 @@ pub async fn update_product(pool: &PgPool, product_id: i32, product: Update) -> 
                 count += 1;
             }
 
-            if let Some(price) = &product.price {
+            if let Some(price) = &update.price {
                 if count > 1 {
                     query.push_str(",");
                 }
@@ -137,10 +147,9 @@ pub async fn update_product(pool: &PgPool, product_id: i32, product: Update) -> 
 
             query.push_str(", updated_at = now()");
 
-            query.push_str(&format!(" WHERE id = {}", product_id));
+            query.push_str(&format!(" WHERE id = {}", id));
 
             query.push_str(" RETURNING *;");
-
 
             client
                 .query_one(&query, &[])
@@ -153,12 +162,12 @@ pub async fn update_product(pool: &PgPool, product_id: i32, product: Update) -> 
     }
 }
 
-pub async fn delete_product(pool: &PgPool, product_id: i32) -> Result<Product, Box<dyn Error>> {
+pub async fn delete(pool: &PgPool, id: i32) -> Result<Product, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
     let product = conn
         .interact(move |client| {
             client
-                .query_one("DELETE FROM products WHERE id = $1 RETURNING *;", &[&product_id])
+                .query_one("DELETE FROM products WHERE id = $1 RETURNING *;", &[&id])
                 .map(|row| Product::from_row(&row))
         })
         .await?;

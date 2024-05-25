@@ -1,5 +1,5 @@
-use actix_web::{delete, get, post, put, web};
-use actix_web::web::ServiceConfig;
+use actix_web::web::{Data, Json, Path, Query, ServiceConfig};
+use actix_web::{delete, get, post, put};
 
 use database::PgPool;
 
@@ -18,31 +18,41 @@ pub fn load_routes(cfg: &mut ServiceConfig) {
 }
 
 #[get("/")]
-async fn get_list(pool: web::Data<PgPool>, search: web::Query<Search>) -> Result<web::Json<Vec<Product>>, actix_web::Error> {
-    let products = actions::get_all_products(&pool, &search).await?;
-    Ok(web::Json(products))
+async fn get_list(
+    pool: Data<PgPool>,
+    search: Query<Search>,
+) -> Result<Json<Vec<Product>>, actix_web::Error> {
+    let list = actions::get_all(&pool, &search).await?;
+    Ok(Json(list))
 }
 
 #[post("/")]
-async fn new(pool: web::Data<PgPool>, product: web::Json<Request>) -> Result<web::Json<Product>, actix_web::Error> {
-    let product = actions::create_product(&pool, product.into_inner()).await?;
-    Ok(web::Json(product))
+async fn new(
+    pool: Data<PgPool>,
+    request: Json<Request>,
+) -> Result<Json<Product>, actix_web::Error> {
+    let element = actions::create(&pool, request.into_inner()).await?;
+    Ok(Json(element))
 }
 
 #[get("/{id}")]
-async fn get(pool: web::Data<PgPool>, id: web::Path<i32>) -> Result<web::Json<Product>, actix_web::Error> {
-    let product = actions::get_product(&pool, id.into_inner()).await?;
-    Ok(web::Json(product))
+async fn get(pool: Data<PgPool>, id: Path<i32>) -> Result<Json<Product>, actix_web::Error> {
+    let element = actions::get(&pool, id.into_inner()).await?;
+    Ok(Json(element))
 }
 
 #[put("/{id}")]
-async fn update(pool: web::Data<PgPool>, id: web::Path<i32>, product: web::Json<Update>) -> Result<web::Json<Product>, actix_web::Error> {
-    let product = actions::update_product(&pool, id.into_inner(), product.into_inner()).await?;
-    Ok(web::Json(product))
+async fn update(
+    pool: Data<PgPool>,
+    id: Path<i32>,
+    update: Json<Update>,
+) -> Result<Json<Product>, actix_web::Error> {
+    let element = actions::update(&pool, id.into_inner(), update.into_inner()).await?;
+    Ok(Json(element))
 }
 
 #[delete("/{id}")]
-async fn delete(pool: web::Data<PgPool>, id: web::Path<i32>) -> Result<web::Json<Product>, actix_web::Error> {
-    let product = actions::delete_product(&pool, id.into_inner()).await?;
-    Ok(web::Json(product))
+async fn delete(pool: Data<PgPool>, id: Path<i32>) -> Result<Json<Product>, actix_web::Error> {
+    let element = actions::delete(&pool, id.into_inner()).await?;
+    Ok(Json(element))
 }

@@ -1,7 +1,7 @@
 use actix_cors::Cors;
-use actix_web::{App, HttpServer, web};
 use actix_web::middleware::Logger;
 use actix_web::web::{Data, ServiceConfig};
+use actix_web::{web, App, HttpServer};
 
 use database::create_pool;
 
@@ -34,8 +34,8 @@ pub async fn start(app_name: &str, routes: fn(&mut ServiceConfig)) -> std::io::R
             // Load the routes
             .configure(routes)
     })
-        .bind(crate::load_bind())?
-        .bind(crate::load_bind_ipv6())?
-        .run()
-        .await
+    .bind(crate::load_bind())?
+    .bind(crate::load_bind_ipv6())?
+    .run()
+    .await
 }

@@ -11,20 +11,22 @@ pub struct Branch {
     pub updated_at: NaiveDateTime,
 }
 
-#[derive(Debug, Default, Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Search {
     pub name: Option<String>,
     pub address: Option<String>,
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct BranchRequest {
+pub struct Request {
     pub name: String,
     pub address: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct BranchUpdate {
+pub struct Update {
     pub name: Option<String>,
     pub address: Option<String>,
 }
