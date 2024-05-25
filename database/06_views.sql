@@ -20,18 +20,3 @@ SELECT b.id,
        b.updated_at
 FROM branches b
 ORDER BY b.id;
-
-/* Stocks view */
-CREATE VIEW stocks_view AS
-SELECT s.id,
-       s.product_id,
-       p.name AS product_name,
-       s.branch_id,
-       b.name AS branch_name,
-       s.quantity,
-       s.created_at,
-       s.updated_at
-FROM stocks s
-         JOIN products p ON s.product_id = p.id
-         JOIN branches b ON s.branch_id = b.id
-ORDER BY s.id;
