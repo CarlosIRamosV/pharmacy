@@ -9,6 +9,7 @@ use database::create_pool;
 mod actions;
 mod models;
 mod routes;
+mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

@@ -1,0 +1,56 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+const id = Astro.params.id;
+---
+<Layout title="Modificar Producto">
+    <h1>Modificar Producto</h1>
+    <p>Id: {id}</p>
+    <form>
+        <label for="name">Nombre</label>
+        <input type="text" id="name" name="name" required>
+        <label for="description">Descripción</label>
+        <input type="text" id="description" name="description" required>
+        <label for="price">Precio</label>
+        <input type="number" id="price" name="price" step="0.01" required>
+        <button>Actualizar</button>
+    </form>
+</Layout>
+
+
+<script define:vars={{id}}>
+    let name = document.getElementById('name');
+    let description = document.getElementById('description');
+    let price = document.getElementById('price');
+    fetch(`http://localhost/api/products/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            name.value = data.name;
+            description.value = data.description;
+            price.value = data.price;
+        });
+
+    document.querySelector('form').addEventListener('submit', (event) => {
+        // Prevent the form from submitting
+        name = name.value;
+        description = description.value;
+        price = price.value;
+
+        event.preventDefault();
+        fetch(`http://localhost/api/products/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, description, price })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Producto actualizado');
+                    window.location.href = '../';
+                } else {
+                    alert('Error al actualizar el producto');
+                }
+            });
+    });
+
+</script>

@@ -28,10 +28,23 @@ GRANT USAGE, SELECT
 /* Products table */
 CREATE ROLE products_user WITH LOGIN PASSWORD 'products_password';
 GRANT INSERT, SELECT, UPDATE, DELETE
-    ON ALL TABLES IN SCHEMA public
+    ON TABLE products, products_view
     TO products_user;
+
 GRANT USAGE, SELECT
-    ON ALL SEQUENCES IN SCHEMA public
+    ON SEQUENCE products_id_seq
+    TO products_user;
+
+GRANT USAGE
+    ON SCHEMA logs
+    TO products_user;
+
+GRANT INSERT, SELECT
+    ON TABLE logs.products
+    TO products_user;
+
+GRANT USAGE, SELECT
+    ON SEQUENCE logs.products_id_seq
     TO products_user;
 
 

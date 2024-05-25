@@ -1,6 +1,55 @@
 \c pharmacy
 
 /* Products */
+-- Trigger function
+CREATE FUNCTION logs.fn_products_trigger() RETURNS TRIGGER AS
+$$
+BEGIN
+    IF (TG_OP = 'INSERT') THEN
+        INSERT INTO logs.products (action, product_id, name, description, price)
+        VALUES ('INSERT', NEW.id, NEW.name, NEW.description, NEW.price);
+    ELSIF (TG_OP = 'UPDATE') THEN
+        INSERT INTO logs.products (action, product_id, name, description, price)
+        VALUES ('UPDATE', NEW.id, NEW.name, NEW.description, NEW.price);
+    ELSIF (TG_OP = 'DELETE') THEN
+        INSERT INTO logs.products (action, product_id, name, description, price)
+        VALUES ('DELETE', OLD.id, OLD.name, OLD.description, OLD.price);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Insert product and return the product
+CREATE FUNCTION fn_products_insert(p_name VARCHAR(100), p_description TEXT, p_price DECIMAL(10, 2))
+    RETURNS TABLE
+            (
+                id         INTEGER,
+                name       VARCHAR(100),
+                description TEXT,
+                price      DECIMAL(10, 2),
+                created_at TIMESTAMP,
+                updated_at TIMESTAMP
+            )
+AS
+$$
+DECLARE
+    v_product products%ROWTYPE;
+BEGIN
+    INSERT INTO products (name, description, price)
+    VALUES (p_name, p_description, p_price)
+    RETURNING * INTO v_product;
+
+    RETURN QUERY
+        SELECT p.id,
+               p.name,
+               p.description,
+               p.price,
+               p.created_at,
+               p.updated_at
+        FROM products p
+        WHERE p.id = v_product.id;
+END;
+$$ LANGUAGE plpgsql;
 
 /* Branches */
 CREATE FUNCTION logs.fn_branches_trigger() RETURNS TRIGGER AS

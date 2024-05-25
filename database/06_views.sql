@@ -5,8 +5,11 @@ CREATE VIEW products_view AS
 SELECT p.id,
        p.name,
        p.description,
-       p.price
-FROM products p;
+       p.price,
+       p.created_at,
+       p.updated_at
+FROM products p
+ORDER BY p.id;
 
 /* Branches view */
 CREATE VIEW branches_view AS
@@ -15,7 +18,8 @@ SELECT b.id,
        b.address,
        b.created_at,
        b.updated_at
-FROM branches b;
+FROM branches b
+ORDER BY b.id;
 
 /* Stocks view */
 CREATE VIEW stocks_view AS
@@ -29,4 +33,5 @@ SELECT s.id,
        s.updated_at
 FROM stocks s
          JOIN products p ON s.product_id = p.id
-         JOIN branches b ON s.branch_id = b.id;
+         JOIN branches b ON s.branch_id = b.id
+ORDER BY s.id;

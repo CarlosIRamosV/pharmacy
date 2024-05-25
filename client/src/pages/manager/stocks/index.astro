@@ -19,22 +19,19 @@ import SelectBranch from "../../../components/SelectBranch.astro";
 
 
     <!-- Table -->
-    <table id="stocks">
-      <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Age</th>
-      </tr>
-      <tr>
-        <td>Jill</td>
-        <td>Smith</td>
-        <td>50</td>
-      </tr>
-      <tr>
-        <td>Eve</td>
-        <td>Jackson</td>
-        <td>94</td>
-      </tr>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Product</th>
+          <th>Product ID</th>
+          <th>Quantity</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody id="stocks">
+        </tbody>
     </table>
 </Layout>
 
@@ -61,16 +58,7 @@ import SelectBranch from "../../../components/SelectBranch.astro";
 
   function renderTable(data) {
     let table = document.getElementById('stocks');
-    table.innerHTML = `
-      <tr>
-        <th>ID</th>
-        <th>Product</th>
-        <th>Product ID</th>
-        <th>Quantity</th>
-        <th>Edit</th>
-        <th>Delete</th>
-      </tr>
-    `;
+    table.innerHTML = '';
     data.forEach(stock => {
       let row = document.createElement('tr');
       row.innerHTML = `
@@ -85,5 +73,3 @@ import SelectBranch from "../../../components/SelectBranch.astro";
     });
   }
 </script>
-
--- Path: /manager/branches/index.astro --

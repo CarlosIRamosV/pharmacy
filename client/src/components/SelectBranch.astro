@@ -4,6 +4,7 @@
 
 <label>
     <select id="branch" name="branch">
+        <option value="">Select Branch</option>
     </select>
 </label>
 
@@ -21,6 +22,10 @@
         });
 
     document.getElementById('branch').addEventListener('change', function() {
+        if (this.value === '') {
+            sessionStorage.removeItem('branch');
+            return;
+        }
         sessionStorage.setItem('branch', this.value);
     });
 </script>
