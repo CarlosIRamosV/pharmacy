@@ -3,6 +3,7 @@ WORKDIR /app
 
 COPY /client .
 
+RUN apk add curl
 RUN npm install
 RUN npm run build
 

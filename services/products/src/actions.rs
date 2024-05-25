@@ -19,7 +19,6 @@ pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box
         || search.offset.is_some()
     {
         let mut query = "SELECT * FROM products_view".to_string();
-        let join : String;
         let mut count = 1;
 
         if search.name.is_some()

@@ -1,13 +1,7 @@
 use std::env::var;
 
-use actix_cors::Cors;
-use actix_web::middleware::Logger;
-use actix_web::web::{Data, ServiceConfig};
-use actix_web::{App, HttpServer};
 use dotenv::dotenv;
 use env_logger::{init_from_env, Env};
-
-use database::create_pool;
 
 pub mod server;
 

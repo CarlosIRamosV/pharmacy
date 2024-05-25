@@ -113,7 +113,6 @@ pub async fn update(pool: &PgPool, id: i32, update: Update) -> Result<Branch, Bo
                     query.push_str(",");
                 }
                 query.push_str(&format!(" address = '{}'", address));
-                count += 1;
             }
 
             query.push_str(", updated_at = now()");
