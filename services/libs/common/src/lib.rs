@@ -1,7 +1,15 @@
 use std::env::var;
 
+use actix_cors::Cors;
+use actix_web::{App, HttpServer};
+use actix_web::middleware::Logger;
+use actix_web::web::{Data, ServiceConfig};
 use dotenv::dotenv;
-use env_logger::{init_from_env, Env};
+use env_logger::{Env, init_from_env};
+
+use database::create_pool;
+
+pub mod server;
 
 pub fn load_env() {
     log::info!("Loading .env file");

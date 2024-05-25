@@ -4,6 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+actix-web.workspace = true
+actix-cors.workspace = true
+database.workspace = true
 dotenv.workspace = true
 env_logger.workspace = true
 log.workspace = true

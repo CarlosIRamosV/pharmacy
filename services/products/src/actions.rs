@@ -1,15 +1,17 @@
 use std::error::Error;
+
 use postgres::Row;
 use postgres_from_row::FromRow;
+
 use database::PgPool;
+
 use crate::models::{Product, Request, Search, Update};
-use crate::utils::rows_to_stocks;
+use crate::utils::rows_to_products;
 
 pub async fn get_all_products(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
 
     let stocks = if search.name.is_some() || search.branch_id.is_some() || search.min_price.is_some() || search.max_price.is_some() || search.limit.is_some() || search.offset.is_some() {
-
         let mut query = "SELECT * FROM products_view".to_string();
         let mut count = 1;
 
@@ -47,7 +49,6 @@ pub async fn get_all_products(pool: &PgPool, search: &Search) -> Result<Vec<Prod
 
         if let Some(limit) = search.limit {
             query.push_str(&format!(" LIMIT {}", limit));
-
         }
 
         if let Some(offset) = search.offset {
@@ -57,14 +58,14 @@ pub async fn get_all_products(pool: &PgPool, search: &Search) -> Result<Vec<Prod
         conn.interact(move |client| {
             client
                 .query(&query, &[])
-                .map(|rows: Vec<Row>| rows_to_stocks(rows))
+                .map(|rows: Vec<Row>| rows_to_products(rows))
         })
             .await?
     } else {
         conn.interact(|client| {
             client
                 .query("SELECT * FROM products_view;", &[])
-                .map(|rows: Vec<Row>| rows_to_stocks(rows))
+                .map(|rows: Vec<Row>| rows_to_products(rows))
         })
             .await?
     };
@@ -111,7 +112,6 @@ pub async fn update_product(pool: &PgPool, product_id: i32, product: Update) -> 
     let conn = pool.get().await.unwrap();
     let product = conn
         .interact(move |client| {
-
             let mut query = "UPDATE products SET".to_string();
             let mut count = 1;
 
