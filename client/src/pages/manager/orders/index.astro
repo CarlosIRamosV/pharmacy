@@ -1,0 +1,123 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import NavbarManager from "../../../components/NavbarManager.astro";
+---
+
+<Layout title="Lista de productos">
+  <NavbarManager />
+  <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">List of orders</h1>
+  <ul>
+    <li>
+      <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+          <a href="orders/new">Add a new order</a>
+        </span>
+        </button>
+    </li>
+  </ul>
+
+  <!-- Search form -->
+  <form>
+    <!-- Name -->
+    <label for="id" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Search id</label>
+    <input type="text" id="id" name="id" placeholder="Search by id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+    <!-- Description -->
+    <label for="date" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Search by date</label>
+    <input
+      type="date"
+      id="date"
+      name="date"
+      placeholder="Search by date"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    />
+
+    <!-- Product -->
+    <label for="product" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Product</label>
+    <input type="text" id="product" name="product" placeholder="Product" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+
+  </form>
+
+  <!-- Table -->
+  <table
+    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+  >
+    <thead
+      class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+    >
+      <tr>
+        <th class="px-6 py-3 text-xl">ID</th>
+        <th class="px-6 py-3 text-xl">Date</th>
+        <th class="px-6 py-3 text-xl">Products</th>
+        <th class="px-6 py-3 text-xl">Total</th>
+        <th class="px-6 py-3 text-xl">
+          <span class="sr-only">Seleccionar</span>
+        </th>
+        <th class="px-6 py-3 text-xl">
+          <span class="sr-only">Editar</span>
+        </th>
+        <th class="px-6 py-3 text-xl">
+          <span class="sr-only">Eliminar</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody id="products"></tbody>
+  </table>
+</Layout>
+
+<script>
+    let id = document.getElementById("id");
+    let date = document.getElementById("date");
+    let product = document.getElementById("product");
+  
+    id.addEventListener("input", loadTable);
+    date.addEventListener("input", loadTable);
+    product.addEventListener("input", loadTable);
+  
+    function loadTable() {
+      let url = "http://localhost/api/orders/";
+  
+      if (id.value) {
+        url += "?id=" + id.value;
+      }
+      if (date.value) {
+        url += url.includes("?") ? "&" : "?";
+        url += "date=" + date.value;
+      }
+      if (product.value) {
+        url += url.includes("?") ? "&" : "?";
+        url += "product=" + product.value;
+      }
+  
+      fetch(url)
+        .then(response => response.json())
+        .then(renderTable);
+    }
+  
+    function renderTable(data) {
+      let table = document.getElementById("products");
+      table.innerHTML = "";
+      data.forEach(order => {
+        let row = document.createElement("tr");
+        row.className = "odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700";
+        row.innerHTML = `
+          <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${order.id}</td>
+          <td class="px-6 py-4">${order.name}</td>
+          <td class="px-6 py-4">${order.description}</td>
+          <td class="px-6 py-4">${order.price}</td>
+          <td class="px-6 py-4">
+            <a href="/products/${order.id}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
+          </td>
+          <td class="px-6 py-4 text-right">
+            <a href="/manager/products/${order.id}/edit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+          </td>
+          <td class="px-6 py-4 text-right">
+            <a href="/manager/products/${order.id}/delete" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
+          </td>
+        `;
+        table.appendChild(row);
+      });
+    }
+  
+    loadTable();
+  </script>

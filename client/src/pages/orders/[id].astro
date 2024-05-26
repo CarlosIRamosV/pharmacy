@@ -1,0 +1,58 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.astro";
+const { id } = Astro.params;
+---
+
+<Layout title="Order">
+  <Navbar />
+  <!-- 
+  <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">Product</h1>
+  <div>
+    <h2 id="product-name">Product Name</h2>
+    <p id="product-description">Product Description</p>
+    <p id="product-price">Product Price</p>
+    <img
+      src=""
+      id="product-image"
+      alt="Product Image"
+      width="200"
+      height="200"
+    />
+
+    <p id="product-id">{{ id }}</p>
+  </div>
+-->
+<div class="flex justify-center items-center h-screen">
+  <div class="flex justify-center items-center">
+      <div class="w-full max-w-sm bg-gray-100 border border-blue-500 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <p id="order-id" class="pl-2 text-l font-semibold dark:text-white">{{id }}</p>
+          <div class="px-5 pb-5">
+              <h5 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white" id="order-date">Date</h5>
+              <div class="mt-2.5 mb-2.5">
+                  <p id="order-products" class="text-l font-semibold dark:text-white">Products</p>
+              </div>
+              <div class="flex items-center space-x-1 rtl:space-x-reverse">
+                  <span class="text-l font-semibold dark:text-white">Total: </span>
+                  <span class="text-l font-semibold dark:text-white" id="order-total">Total</span>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+</Layout>
+
+<script define:vars={{ id }}>
+  fetch("http://localhost/api/orders/" + id)
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("order-date").innerText = data.date;
+      document.getElementById("order-products").innerText =
+        data.products;
+      document.getElementById("order-total").innerText = data.total;
+      document.getElementById("order-id").innerText = data.id;
+    });
+</script>
+
