@@ -183,10 +183,10 @@ import NavbarManager from "../../../components/NavbarManager.astro";
           <a href="/products/${product.id}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
         </td>
         <td class="px-6 py-4 text-right">
-          <a href="./${product.id}/edit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+          <a href="/manager/products/${product.id}/edit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
         </td>
         <td class="px-6 py-4 text-right">
-          <a href="./${product.id}/delete" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
+          <a href="/manager/products/${product.id}/delete" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</a>
         </td>
       `;
       table.appendChild(row);

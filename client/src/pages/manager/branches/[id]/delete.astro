@@ -26,8 +26,8 @@ const id = Astro.params.id;
   })
     .then((response) => response.json())
     .then((data) => {
-      document.querySelector("p:nth-of-type(2)").textContent += data.name;
-      document.querySelector("p:nth-of-type(3)").textContent += data.address;
+      document.querySelector("p:nth-of-type(1)").textContent += data.name;
+      document.querySelector("p:nth-of-type(2)").textContent += data.address;
     });
 
   document.getElementById("delete").addEventListener("click", () => {
