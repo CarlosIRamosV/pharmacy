@@ -5,29 +5,36 @@ import NavbarManager from "../../../components/NavbarManager.astro";
 
 <Layout title="Lista de productos">
   <NavbarManager />
-  <h1>Lista de productos</h1>
+  <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">Lista de productos</h1>
   <ul>
-    <li><a href="./new">Add a new product</a></li>
+    <li>
+      <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+          <a href="./new">Add a new product</a>
+        </span>
+        </button>
+    </li>
   </ul>
 
   <!-- Search form -->
   <form>
     <!-- Name -->
-    <label for="name">Search by name</label>
-    <input type="text" id="name" name="name" placeholder="Search by name" />
+    <label for="name" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Search by name</label>
+    <input type="text" id="name" name="name" placeholder="Search by name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
     <!-- Description -->
-    <label for="description">Search by description</label>
+    <label for="description" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Search by description</label>
     <input
       type="text"
       id="description"
       name="description"
       placeholder="Search by description"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
     />
 
     <!-- Limit -->
-    <label for="limit">Limit</label>
-    <select id="limit" name="limit">
+    <label for="limit" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Limit</label>
+    <select id="limit" name="limit" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
       <option value="10">10</option>
       <option value="20">20</option>
       <option value="50">50</option>
@@ -35,25 +42,27 @@ import NavbarManager from "../../../components/NavbarManager.astro";
     </select>
 
     <!-- Pagination -->
-    <label for="page">Page</label>
-    <input type="number" id="page" name="page" value="1" />
+    <label for="page" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Page</label>
+    <input type="number" id="page" name="page" value="1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
 
     <!-- Min price -->
-    <label for="min_price">Min price</label>
+    <label for="min_price" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Min price</label>
     <input
       type="number"
       id="min_price"
       name="min_price"
       placeholder="Min price"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
     />
 
     <!-- Max price -->
-    <label for="max_price">Max price</label>
+    <label for="max_price" class="mb-2 text-sm font-medium text-gray-900 dark:text-white">Max price</label>
     <input
       type="number"
       id="max_price"
       name="max_price"
       placeholder="Max price"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
     />
   </form>
 
@@ -65,17 +74,17 @@ import NavbarManager from "../../../components/NavbarManager.astro";
       class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
     >
       <tr>
-        <th class="px-6 py-3">ID</th>
-        <th class="px-6 py-3">Name</th>
-        <th class="px-6 py-3">Description</th>
-        <th class="px-6 py-3">Price</th>
-        <th class="px-6 py-3">
+        <th class="px-6 py-3 text-xl">ID</th>
+        <th class="px-6 py-3 text-xl">Name</th>
+        <th class="px-6 py-3 text-xl">Description</th>
+        <th class="px-6 py-3 text-xl">Price</th>
+        <th class="px-6 py-3 text-xl">
           <span class="sr-only">Seleccionar</span>
         </th>
-        <th class="px-6 py-3">
+        <th class="px-6 py-3 text-xl">
           <span class="sr-only">Editar</span>
         </th>
-        <th class="px-6 py-3">
+        <th class="px-6 py-3 text-xl">
           <span class="sr-only">Eliminar</span>
         </th>
       </tr>
