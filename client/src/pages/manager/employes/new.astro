@@ -1,0 +1,54 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import NavbarManager from "../../../components/NavbarManager.astro";
+---
+
+<Layout title="Create a new employee">
+  <NavbarManager />
+  <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">Create an employee</h1>
+  <form class="flex flex-col gap-4 pl-5  items-center justify-center">
+    <label for="name" class="w-3/4 mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+    <input type="text" id="name" name="name" required class="w-3/4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+    <label for="lastname" class="w-3/4 mb-2 text-sm font-medium text-gray-900 dark:text-white">Last name</label>
+    <input type="text" id="lastname" name="lastname" required class="w-3/4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+    <label for="email" class="mb-2 text-sm font-medium text-gray-900 dark:text-white w-3/4">Email</label>
+    <input type="email" id="email" name="email" required class="w-3/4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+    <label for="password" class="mb-2 text-sm font-medium text-gray-900 dark:text-white w-3/4">Password</label>
+    <input type="password" id="password" name="password" required class="w-3/4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+    <label for="type" class="mb-2 text-sm font-medium text-gray-900 dark:text-white w-3/4">Type</label>
+    <select id="type" name="type" required class="w-3/4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      <option value="admin">Admin</option>
+      <option value="employee">Employee</option>
+    </select>
+    <button type="submit"class="w-1/4 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">Create</button>
+  </form>
+</Layout>
+
+<script>
+  document.querySelector("form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const name = document.querySelector("#name").value;
+    const lastname = document.querySelector("#lastname").value;
+    const email = document.querySelector("#email").value;
+    const password = document.querySelector("#password").value;
+    const type = document.querySelector("#type").value;
+
+
+    console.log(JSON.stringify({ name, lastname, email, password, type}));
+
+    //const response = await fetch('/api/branches', {
+    const response = await fetch("http://localhost/api/employes/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, lastname, email, password, type }),
+    });
+    if (response.ok) {
+      alert("Employee created successfully");
+      window.location.href = "./";
+    } else {
+      alert("Error creating employee");
+    }
+  });
+</script>

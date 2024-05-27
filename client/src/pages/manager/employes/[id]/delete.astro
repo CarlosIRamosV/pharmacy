@@ -1,0 +1,82 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import { req } from "astro/dist/core/messages";
+import NavbarManager from "../../../../components/NavbarManager.astro";
+
+const id = Astro.params.id;
+---
+
+<Layout title="Delete employee">
+  <NavbarManager />
+  <h1 class="pt-5 mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">Delete employee</h1>
+  <p class="ml-2 mb-4 text-2xl font-bold leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white text-center text-red-500">Are you sure you want to remove the following employee?</p>
+  <div class="pl-5">
+    <p class="ml-2 mb-4 text-xl font-normal leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white">Name:</p>
+    <p class="ml-2 mb-4 text-xl font-normal leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white">Last name:</p>
+    <p class="ml-2 mb-4 text-xl font-normal leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white">Email:</p>
+    <p class="ml-2 mb-4 text-xl font-normal leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white">Password:</p>
+    <p class="ml-2 mb-4 text-xl font-normal leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white">Type:</p>
+  
+  <div id="inUse" style="display: none;">
+      <p>
+        This employee cannot be deleted because it is currently in use in one or
+        more branches.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Sucursal</th>
+            <th>Cantidad</th>
+            <th>Ir a la sucursal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Nombre de la sucursal</td>
+            <td>Cantidad</td>
+            <td><a href="#">Ir a la sucursal</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button id="delete" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Eliminar</button>
+    <button onclick="location.href='../'" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Cancelar</button>
+  </div>
+</Layout>
+
+<script define:vars={{ id }}>
+  fetch(`http://localhost/api/employes/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      document.querySelector("p:nth-of-type(1)").textContent += data.name;
+      document.querySelector("p:nth-of-type(2)").textContent += data.lastname;
+      document.querySelector("p:nth-of-type(3)").textContent += data.email;
+        document.querySelector("p:nth-of-type(4)").textContent += data.password;
+        document.querySelector("p:nth-of-type(5)").textContent += data.type;
+    });
+
+  document.getElementById("delete").addEventListener("click", () => {
+    // Alerta de confirmación
+    if (window.confirm("Are you sure you want to delete this branch?")) {
+      fetch(`http://localhost/api/employes/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
+        if (response.ok) {
+          alert("Employee deleted successfully");
+          location.href = "../";
+        } else {
+          alert("An error occurred while deleting the employee.");
+        }
+      });
+    }
+  });
+</script>
