@@ -2,34 +2,51 @@
 import Layout from "../../layouts/Layout.astro";
 import NavbarManager from "../../components/NavbarManager.astro";
 import Footer from "../../components/Footer.astro";
+import Navbar from "../../components/Navbar.astro";
 ---
 
 <Layout title="Panel de control">
-  <NavbarManager />
-  <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">Panel de control</h1>
-  <p class="text-xl font-bold dark:text-white">¡Bienvenido al panel de control!</p>
-
-  <ul>
-    <li>
-      <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+  <!-- <NavbarManager />-->
+  <Navbar/>
+  <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">Control panel</h1>
+  <p class="text-xl font-bold dark:text-white">¡Welcome to the control panel!</p>
+  <div class="flex">
+    <ul class="flex pl-2 pt-5 justify-center pb-5">
+      <li class="flex flex-col items-center m-1">
+        <img src="../../../public/farmacia.png" alt="">
+        <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+          <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            <a href="/manager/branches">Branch management</a>
+          </span>
+          </button>
+        
+      </li>
+      <li class="flex flex-col items-center m-1">
+        <img class="" src="../../../public/medicamentos.png" alt="">
+        <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+          <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            <a href="/manager/products">Product management</a>
+          </span>
+        </button>
+      </li>
+      <li class="flex flex-col items-center m-1">
+        <img src="../../../public/empleado.png" alt="">
+        <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+          <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+          <a href="/manager/employes">Employee management</a>
+          </span>
+          </button>
+      </li>
+      <li class="flex flex-col items-center m-1">
+        <img src="../../../public/orders.png" alt="">
+        <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
         <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-          <a href="/manager/branches">Gestión de sucursales</a>
+          <a href="/manager/orders">Orders management</a>
         </span>
         </button>
-      
-    </li>
-    <li>
-      <button class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
-        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-          <a href="/manager/products">Gestión de productos</a>
-        </span>
-      </button>
-    </li>
-  </ul>
+      </li>
+    </ul>
+</div>
    <Footer />
 </Layout>
-<style>
-  ul{
-    padding-left: 2%;
-  }
-</style>
+
