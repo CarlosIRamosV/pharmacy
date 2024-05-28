@@ -1,119 +1,173 @@
-
 <div class="flex">
-    <div id="product-container" class="flex flex-wrap justify-around  mt-5 w-1/2">
-        
-    </div>
-    <div id="sale-container" class="flex flex-col w-1/2">
-        <table class="w-full h-3/4 text-sm text-left rtl:text-right text-gray-600 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th class="px-6 py-3 text-xl">Id</th>
-                    <th class="px-6 py-3 text-xl">Name</th>
-                    <th class="px-6 py-3 text-xl">Description</th>
-                    <th class="px-6 py-3 text-xl">Price</th>
-                </tr>
-            </thead>
-            <tbody id="products">
-
-            </tbody>
-
-        </table>
-        <p class="mb-2 text-3xl font-bold text-gray-900 dark:text-white" id="total">Total:</p>
-        <button class=" w-1/4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded dark:bg-gray-700">Buy</button>
-    </div>
+  <div id="product-container" class="flex flex-wrap justify-around mt-5 w-1/2">
+  </div>
+  <div id="sale-container" class="flex flex-col w-1/2">
+    <table
+      class="w-full h-3/4 text-sm text-left rtl:text-right text-gray-600 dark:text-gray-400"
+    >
+      <thead
+        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+      >
+        <tr>
+          <th class="px-6 py-3 text-xl">Id</th>
+          <th class="px-6 py-3 text-xl">Name</th>
+          <th class="px-6 py-3 text-xl">Description</th>
+          <th class="px-6 py-3 text-xl">Price</th>
+        </tr>
+      </thead>
+      <tbody id="products"> </tbody>
+    </table>
+    <p class="mb-2 text-3xl font-bold text-gray-900 dark:text-white" id="total">
+      Total:
+    </p>
+    <button
+      class="w-1/4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded dark:bg-gray-700"
+      >Buy</button
+    >
+  </div>
 </div>
 <script>
-    let url = "http://localhost/api/products/";
-    fetch(url)
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        data.forEach(element => {
-            console.log(element);
-            const productContainer = document.getElementById("product-container");
+  let url = "http://localhost/api/products/";
+  fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      data.forEach((element) => {
+        console.log(element);
+        const productContainer = document.getElementById("product-container");
 
-            // Create a new product card
-            let productCard = document.createElement('div');
-            productCard.classList.add('flex', 'items-center','product-card','mb-5', 'w-full', 'max-w-sm', 'bg-gray-100', 'border', 'border-blue-500', 'rounded-lg', 'shadow', 'dark:bg-gray-800', 'dark:border-gray-700');
+        // Create a new product card
+        let productCard = document.createElement("div");
+        productCard.classList.add(
+          "flex",
+          "items-center",
+          "product-card",
+          "mb-5",
+          "w-full",
+          "max-w-sm",
+          "bg-gray-100",
+          "border",
+          "border-blue-500",
+          "rounded-lg",
+          "shadow",
+          "dark:bg-gray-800",
+          "dark:border-gray-700",
+        );
 
-            // Create and append product image
-            let productImageLink = document.createElement('a');
-            
-            let productImage = document.createElement('img');
-            productImage.id = "product-image";
-            productImage.classList.add('p-8', 'rounded-t-lg');
-            productImage.src = "https://via.placeholder.com/150"; // Placeholder image URL
-            productImage.alt = element.name;
-            productImage.width = 300;
-            productImage.height = 300;
-            productImageLink.appendChild(productImage);
-            productCard.appendChild(productImageLink);
+        // Create and append product image
+        let productImageLink = document.createElement("a");
 
-            // Create and append product details container
-            let productDetails = document.createElement('div');
-            productDetails.classList.add('px-5', 'pb-5');
+        let productImage = document.createElement("img");
+        productImage.id = "product-image";
+        productImage.classList.add("p-8", "rounded-t-lg");
+        productImage.src = "https://via.placeholder.com/150"; // Placeholder image URL
+        productImage.alt = element.name;
+        productImage.width = 300;
+        productImage.height = 300;
+        productImageLink.appendChild(productImage);
+        productCard.appendChild(productImageLink);
 
-            // Create and append product name
-            let productName = document.createElement('h5');
-            productName.classList.add('text-3xl', 'font-bold', 'tracking-tight', 'text-gray-900', 'dark:text-white');
-            productName.id = "product-name";
-            productName.innerText = element.name;
-            productDetails.appendChild(productName);
+        // Create and append product details container
+        let productDetails = document.createElement("div");
+        productDetails.classList.add("px-5", "pb-5");
 
-            // Create and append product description container
-            let productDescriptionContainer = document.createElement('div');
-            productDescriptionContainer.classList.add('mt-2.5', 'mb-2.5');
-            
-            // Create and append product description
-            let productDescription = document.createElement('p');
-            productDescription.id = "product-description";
-            productDescription.classList.add('text-l', 'font-semibold', 'dark:text-white');
-            productDescription.innerText = element.description;
-            productDescriptionContainer.appendChild(productDescription);
-            productDetails.appendChild(productDescriptionContainer);
+        // Create and append product name
+        let productName = document.createElement("h5");
+        productName.classList.add(
+          "text-3xl",
+          "font-bold",
+          "tracking-tight",
+          "text-gray-900",
+          "dark:text-white",
+        );
+        productName.id = "product-name";
+        productName.innerText = element.name;
+        productDetails.appendChild(productName);
 
-            // Create and append product price container
-            let productPriceContainer = document.createElement('div');
-            productPriceContainer.classList.add('flex', 'items-center', 'space-x-1', 'rtl:space-x-reverse');
-            
-            // Create and append price label
-            let priceLabel = document.createElement('span');
-            priceLabel.classList.add('text-l', 'font-semibold', 'dark:text-white');
-            priceLabel.innerText = 'Price: ';
-            productPriceContainer.appendChild(priceLabel);
-            
-            // Create and append product price
-            let productPrice = document.createElement('span');
-            productPrice.id = "product-price";
-            productPrice.classList.add('text-l', 'font-semibold', 'dark:text-white');
-            productPrice.innerText = element.price;
-            productPriceContainer.appendChild(productPrice);
+        // Create and append product description container
+        let productDescriptionContainer = document.createElement("div");
+        productDescriptionContainer.classList.add("mt-2.5", "mb-2.5");
 
-            // Create and append buttons product
-            let addButton = document.createElement('button');
-            addButton.classList.add('bg-green-500', 'hover:bg-green-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'dark:bg-gray-700');
-            addButton.innerText = '+';
-            let removeButton = document.createElement('button');
-            removeButton.classList.add('bg-red-500', 'hover:bg-red-700', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded', 'dark:bg-gray-700');
-            removeButton.innerText = '-';
-            productPriceContainer.appendChild(addButton);
-            productPriceContainer.appendChild(removeButton);
+        // Create and append product description
+        let productDescription = document.createElement("p");
+        productDescription.id = "product-description";
+        productDescription.classList.add(
+          "text-l",
+          "font-semibold",
+          "dark:text-white",
+        );
+        productDescription.innerText = element.description;
+        productDescriptionContainer.appendChild(productDescription);
+        productDetails.appendChild(productDescriptionContainer);
 
-            productDetails.appendChild(productPriceContainer);
+        // Create and append product price container
+        let productPriceContainer = document.createElement("div");
+        productPriceContainer.classList.add(
+          "flex",
+          "items-center",
+          "space-x-1",
+          "rtl:space-x-reverse",
+        );
 
-            // Append the product details to the card
-            productCard.appendChild(productDetails);
+        // Create and append price label
+        let priceLabel = document.createElement("span");
+        priceLabel.classList.add("text-l", "font-semibold", "dark:text-white");
+        priceLabel.innerText = "Price: ";
+        productPriceContainer.appendChild(priceLabel);
 
-            // Append the product card to the container
-            productContainer.appendChild(productCard);
-        });
+        // Create and append product price
+        let productPrice = document.createElement("span");
+        productPrice.id = "product-price";
+        productPrice.classList.add(
+          "text-l",
+          "font-semibold",
+          "dark:text-white",
+        );
+        productPrice.innerText = element.price;
+        productPriceContainer.appendChild(productPrice);
+
+        // Create and append buttons product
+        let addButton = document.createElement("button");
+        addButton.classList.add(
+          "bg-green-500",
+          "hover:bg-green-700",
+          "text-white",
+          "font-bold",
+          "py-2",
+          "px-4",
+          "rounded",
+          "dark:bg-gray-700",
+        );
+        addButton.innerText = "+";
+        let removeButton = document.createElement("button");
+        removeButton.classList.add(
+          "bg-red-500",
+          "hover:bg-red-700",
+          "text-white",
+          "font-bold",
+          "py-2",
+          "px-4",
+          "rounded",
+          "dark:bg-gray-700",
+        );
+        removeButton.innerText = "-";
+        productPriceContainer.appendChild(addButton);
+        productPriceContainer.appendChild(removeButton);
+
+        productDetails.appendChild(productPriceContainer);
+
+        // Append the product details to the card
+        productCard.appendChild(productDetails);
+
+        // Append the product card to the container
+        productContainer.appendChild(productCard);
+      });
     })
-    .catch(error => console.error('Error fetching data:', error));
+    .catch((error) => console.error("Error fetching data:", error));
 </script>
 
- 
 <style>
-    #product-container {
-        margin-bottom: 5%;
-    }
+  #product-container {
+    margin-bottom: 5%;
+  }
 </style>

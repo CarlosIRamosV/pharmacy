@@ -100,3 +100,34 @@ BEGIN
         WHERE b.id = v_branch.id;
 END;
 $$ LANGUAGE plpgsql;
+
+/* Images */
+
+CREATE FUNCTION fn_create_image(p_image BYTEA, p_hash VARCHAR(100))
+    RETURNS TABLE
+            (
+                id         SERIAL,
+                image      BYTEA,
+                hash       VARCHAR(100),
+                created_at TIMESTAMP,
+                updated_at TIMESTAMP
+            )
+AS
+$$
+DECLARE
+    v_image images%ROWTYPE;
+BEGIN
+    INSERT INTO images (image, hash)
+    VALUES (p_image, p_hash)
+    RETURNING * INTO v_image;
+
+    RETURN QUERY
+        SELECT i.id,
+               i.image,
+               i.hash,
+               i.created_at,
+               i.updated_at
+        FROM images i
+        WHERE i.id = v_image.id;
+END;
+$$ LANGUAGE plpgsql;

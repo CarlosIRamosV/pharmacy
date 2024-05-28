@@ -6,19 +6,51 @@ const id = Astro.params.id;
 
 <Layout title="Modificar Sucursal">
   <NavbarManager />
-  <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">Modificar Sucursal</h1>
-  <p class="ml-2 mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white"> Id: {id}</p>
+  <h1
+    class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center"
+  >
+    Modificar Sucursal
+  </h1>
+  <p
+    class="ml-2 mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white"
+  >
+    Id: {id}
+  </p>
   <form>
-    <label for="name" class="mb-2 text-sm font-medium text-gray-900 dark:text-white ml-2">Nombre</label>
-    <input type="text" id="name" name="name" required  class=" ml-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-    <label for="address" class="mb-2 text-sm font-medium text-gray-900 dark:text-white ml-2">Dirección</label>
-    <input type="text" id="address" name="address" required  class=" ml-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-    <br>
-    <button class="relative inline-flex items-center mt-5 ml-7 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-          Actualizar
-        </span>
-        </button>
+    <label
+      for="name"
+      class="mb-2 text-sm font-medium text-gray-900 dark:text-white ml-2"
+      >Nombre</label
+    >
+    <input
+      type="text"
+      id="name"
+      name="name"
+      required
+      class="ml-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    />
+    <label
+      for="address"
+      class="mb-2 text-sm font-medium text-gray-900 dark:text-white ml-2"
+      >Dirección</label
+    >
+    <input
+      type="text"
+      id="address"
+      name="address"
+      required
+      class="ml-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    />
+    <br />
+    <button
+      class="relative inline-flex items-center mt-5 ml-7 justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800"
+    >
+      <span
+        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0"
+      >
+        Actualizar
+      </span>
+    </button>
   </form>
 </Layout>
 

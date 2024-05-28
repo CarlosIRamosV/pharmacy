@@ -23,29 +23,49 @@ const { id } = Astro.params;
     <p id="product-id">{{ id }}</p>
   </div>
 -->
-<div class="flex justify-center items-center h-screen">
-  <div class="flex justify-center items-center">
-      <div class="w-full max-w-sm bg-gray-100 border border-blue-500 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-          <a href="#">
-            <p id="product-id" class="pl-2 text-l font-semibold dark:text-white">{{id }}</p>
-              <img class="p-8 rounded-t-lg mx-auto" src="" alt="product image" width="300"
-              height="300"/>
-          </a>
-          <div class="px-5 pb-5">
-              <h5 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white" id="product-name">Product Name</h5>
-              <div class="mt-2.5 mb-2.5">
-                  <p id="product-description" class="text-l font-semibold dark:text-white">Product Description</p>
-              </div>
-              <div class="flex items-center space-x-1 rtl:space-x-reverse">
-                  <span class="text-l font-semibold dark:text-white">Price: </span>
-                  <span class="text-l font-semibold dark:text-white" id="product-price">Price</span>
-              </div>
+  <div class="flex justify-center items-center h-screen">
+    <div class="flex justify-center items-center">
+      <div
+        class="w-full max-w-sm bg-gray-100 border border-blue-500 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+      >
+        <a href="#">
+          <p id="product-id" class="pl-2 text-l font-semibold dark:text-white">
+            {{ id }}
+          </p>
+          <img
+            class="p-8 rounded-t-lg mx-auto"
+            src=""
+            alt="product image"
+            width="300"
+            height="300"
+          />
+        </a>
+        <div class="px-5 pb-5">
+          <h5
+            class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
+            id="product-name"
+          >
+            Product Name
+          </h5>
+          <div class="mt-2.5 mb-2.5">
+            <p
+              id="product-description"
+              class="text-l font-semibold dark:text-white"
+            >
+              Product Description
+            </p>
           </div>
+          <div class="flex items-center space-x-1 rtl:space-x-reverse">
+            <span class="text-l font-semibold dark:text-white">Price: </span>
+            <span
+              class="text-l font-semibold dark:text-white"
+              id="product-price">Price</span
+            >
+          </div>
+        </div>
       </div>
+    </div>
   </div>
-</div>
-
-
 </Layout>
 
 <script define:vars={{ id }}>
@@ -62,4 +82,3 @@ const { id } = Astro.params;
       document.getElementById("product-image").alt = data.name;
     });
 </script>
-
