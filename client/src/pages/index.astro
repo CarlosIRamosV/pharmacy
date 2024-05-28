@@ -7,39 +7,25 @@ import Products from "../components/Products.astro";
 ---
 
 <Layout title="Farmacia">
-  <Navbar />
-  <ul>
-    <li>
-      <a
-        class="inline-flex items-center text-lg text-blue-600 dark:text-blue-500"
-        href="./manager">Panel de control</a
-      >
-    </li>
-  </ul>
+  
+    <Navbar />
+    <ul>
+      <li><a class="inline-flex items-center text-lg text-blue-600 dark:text-blue-500" href="login">Panel de control</a></li>
+    </ul>
 
-  <h1
-    class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center"
-  >
-    Farmacia
-  </h1>
+    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">Farmacia</h1>
 
-  <p
-    class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400"
-  >
-    In Farmacia To Go you will find the best products for your health and
-    well-being. We offer a wide variety of high-quality products.
-  </p>
-  <div class="flex justify-center">
-    <p
-      class="inline-flex items-center text-lg text-gray-900 dark:text-gray-700"
-    >
-      Our locations
-    </p>
-  </div>
+    <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">In Farmacia To Go you will find the best products for your health and well-being. We offer a wide variety of high-quality products.</p>
+    <div class="flex justify-center">
+      <p class="inline-flex items-center text-lg text-gray-900 dark:text-gray-700">Our locations</p>
+    </div>
 
-  <Location />
-  <Products />
-  <Footer />
+    <Location />
+    <Products />
+    <Footer/>
 </Layout>
+  
 
-<style></style>
+<style>
+  
+</style>
