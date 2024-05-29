@@ -1,4 +1,4 @@
-use common::server::start;
+use server::server;
 
 mod actions;
 mod models;
@@ -7,5 +7,5 @@ mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    start("Branches Service", routes::load_routes).await
+    server("Branches Service", routes::load_routes).await
 }

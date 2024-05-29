@@ -1,11 +1,8 @@
 [package]
 name = "database"
-version = "0.1.0"
 edition = "2021"
 
 [dependencies]
 deadpool-r2d2.workspace = true
-dotenv.workspace = true
 log.workspace = true
 r2d2_postgres.workspace = true
-serde.workspace = true

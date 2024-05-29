@@ -5,4 +5,4 @@ CREATE DATABASE pharmacy
     CONNECTION LIMIT = -1;
 
 \c pharmacy
-CREATE SCHEMA logs;
+CREATE SCHEMA log;

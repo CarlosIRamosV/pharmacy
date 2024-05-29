@@ -1,11 +1,10 @@
 [package]
-name = "common"
-version = "0.1.0"
+name = "server"
 edition = "2021"
 
 [dependencies]
-actix-web.workspace = true
 actix-cors.workspace = true
+actix-web.workspace = true
 database.workspace = true
 dotenv.workspace = true
 env_logger.workspace = true

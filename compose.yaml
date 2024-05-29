@@ -29,23 +29,45 @@ services:
       - client
       - products
 
-  db:
-    container_name: Database
-    image: postgres:latest
+  database_master:
+    image: postgres:alpine
+    container_name: master_database
+    command: "-c 'config_file=/etc/postgresql/postgresql.conf'"
     restart: always
-    environment:
-      POSTGRES_PASSWORD: postgres
     volumes:
-      - type: bind
-        source: ./database/
-        target: /docker-entrypoint-initdb.d/
+      - master_data:/var/lib/postgresql/data
+      - ./database/data:/docker-entrypoint-initdb.d/
+      - ./database/master/11_replication.sql:/docker-entrypoint-initdb.d/11_replication.sql
+      - ./database/master/12_data.sql:/docker-entrypoint-initdb.d/12_data.sql
+      - ./database/master/postgresql.conf:/etc/postgresql/postgresql.conf
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: my_password
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
-      timeout: 5s
-      retries: 3
+      timeout: 6s
+      retries: 5
+
+  database_slave:
+    image: postgres:alpine
+    container_name: slave_database
+    restart: always
+    volumes:
+      - save_data:/var/lib/postgresql/data
+      - ./database/data:/docker-entrypoint-initdb.d/
+      - ./database/slave/11_replication.sql:/docker-entrypoint-initdb.d/11_replication.sql
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: my_password
+      POSTGRES_INITDB_ARGS: "--auth-host=md5 --auth-local=md5"
+    depends_on:
+      database_master:
+        condition: service_healthy
+    links:
+      - database_master
 
   branches:
     container_name: Branches
@@ -55,17 +77,17 @@ services:
     image: pharmacy/branches:latest
     restart: always
     environment:
-      PG_HOST: db
+      PG_HOST: database_master
       PG_USER: branches_user
       PG_PASSWORD: branches_password
       PG_DBNAME: pharmacy
     depends_on:
-      db:
+      database_master:
         condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
     links:
-      - db
+      - database_master
 
   products:
     container_name: Products
@@ -75,14 +97,20 @@ services:
     image: pharmacy/products:latest
     restart: always
     environment:
-      PG_HOST: db
+      PG_HOST: database_master
       PG_USER: products_user
       PG_PASSWORD: products_password
       PG_DBNAME: pharmacy
     depends_on:
-      db:
+      database_master:
         condition: service_healthy
     healthcheck:
         test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
     links:
-      - db
+      - database_master
+
+volumes:
+    master_data:
+      name: master_data
+    save_data:
+        name: save_data

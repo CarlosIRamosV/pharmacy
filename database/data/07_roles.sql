@@ -2,47 +2,46 @@
 
 
 /* Branches table */
-
 CREATE ROLE branches_user WITH LOGIN PASSWORD 'branches_password';
 GRANT INSERT, SELECT, UPDATE, DELETE
-    ON TABLE branches, branches_view
+    ON TABLE branch, branch_view
     TO branches_user;
 
 GRANT USAGE, SELECT
-    ON SEQUENCE branches_id_seq
+    ON SEQUENCE branch_id_seq
     TO branches_user;
 
 GRANT USAGE
-    ON SCHEMA logs
+    ON SCHEMA log
     TO branches_user;
 
 GRANT INSERT, SELECT
-    ON TABLE logs.branches
+    ON TABLE log.branch
     TO branches_user;
 
 GRANT USAGE, SELECT
-    ON SEQUENCE logs.branches_id_seq
+    ON SEQUENCE log.branch_id_seq
     TO branches_user;
 
 
 /* Products table */
 CREATE ROLE products_user WITH LOGIN PASSWORD 'products_password';
 GRANT INSERT, SELECT, UPDATE, DELETE
-    ON TABLE products, products_view
+    ON TABLE product, product_view
     TO products_user;
 
 GRANT USAGE, SELECT
-    ON SEQUENCE products_id_seq
+    ON SEQUENCE product_id_seq
     TO products_user;
 
 GRANT USAGE
-    ON SCHEMA logs
+    ON SCHEMA log
     TO products_user;
 
 GRANT INSERT, SELECT
-    ON TABLE logs.products
+    ON TABLE log.product
     TO products_user;
 
 GRANT USAGE, SELECT
-    ON SEQUENCE logs.products_id_seq
+    ON SEQUENCE log.product_id_seq
     TO products_user;

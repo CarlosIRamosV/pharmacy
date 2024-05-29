@@ -1,20 +1,16 @@
-use std::env;
+extern crate r2d2_postgres;
+extern crate deadpool_r2d2;
 
+use std::env;
 use deadpool_r2d2::{Manager, Pool, Runtime};
 use r2d2_postgres::postgres::{Config, NoTls};
 use r2d2_postgres::PostgresConnectionManager;
+
 
 pub type PgManager = Manager<PostgresConnectionManager<NoTls>>;
 
 pub type PgPool = Pool<PgManager>;
 
-///
-/// Create a new database pool
-///
-/// # Returns
-///
-/// A new database pool
-///
 pub fn create_pool(app_name: &str) -> PgPool {
     log::info!("Loading database configuration");
     let mut config = Config::new();
