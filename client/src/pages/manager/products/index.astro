@@ -125,6 +125,7 @@ import NavbarManager from "../../../components/NavbarManager.astro";
         <th class="px-6 py-3 text-xl">Name</th>
         <th class="px-6 py-3 text-xl">Description</th>
         <th class="px-6 py-3 text-xl">Price</th>
+        <th class="px-6 py-3 text-xl">Image</th>
         <th class="px-6 py-3 text-xl">
           <span class="sr-only">Seleccionar</span>
         </th>
@@ -226,6 +227,9 @@ import NavbarManager from "../../../components/NavbarManager.astro";
         <td class="px-6 py-4">${product.name}</td>
         <td class="px-6 py-4">${product.description}</td>
         <td class="px-6 py-4">${product.price}</td>
+        <td class="px-6 py-4">
+          <img src="${product.image}" alt="${product.name}" class="w-10 h-10 object-cover rounded-full">
+        </td>
         <td class="px-6 py-4">
           <a href="/products/${product.id}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
         </td>
