@@ -81,6 +81,7 @@ services:
       PG_USER: branches_user
       PG_PASSWORD: branches_password
       PG_DBNAME: pharmacy
+      IPV4: 0.0.0.0:8080
     depends_on:
       database_master:
         condition: service_healthy
@@ -101,6 +102,7 @@ services:
       PG_USER: products_user
       PG_PASSWORD: products_password
       PG_DBNAME: pharmacy
+      IPV4: 0.0.0.0:8080
     depends_on:
       database_master:
         condition: service_healthy

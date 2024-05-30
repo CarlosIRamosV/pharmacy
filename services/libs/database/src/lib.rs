@@ -1,11 +1,10 @@
-extern crate r2d2_postgres;
 extern crate deadpool_r2d2;
+extern crate r2d2_postgres;
 
-use std::env;
 use deadpool_r2d2::{Manager, Pool, Runtime};
-use r2d2_postgres::postgres::{Config, NoTls};
+use r2d2_postgres::postgres::{Config, Error, NoTls};
 use r2d2_postgres::PostgresConnectionManager;
-
+use std::env;
 
 pub type PgManager = Manager<PostgresConnectionManager<NoTls>>;
 
@@ -35,4 +34,11 @@ pub fn create_pool(app_name: &str) -> PgPool {
         .max_size(16)
         .build()
         .expect("Failed to create pool")
+}
+
+pub fn get_error_code(err: &Error) -> i32 {
+    match err.code() {
+        Some(code) => code.code().parse().unwrap_or(0),
+        None => 0,
+    }
 }

@@ -23,8 +23,8 @@ CREATE TABLE image
 CREATE TABLE branch
 (
     id         SERIAL PRIMARY KEY,
-    name       VARCHAR(100) NOT NULL,
-    address    VARCHAR(100) NOT NULL,
+    name       VARCHAR(100) NOT NULL UNIQUE,
+    address    VARCHAR(100) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );

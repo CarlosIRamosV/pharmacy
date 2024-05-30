@@ -1,7 +1,9 @@
 extern crate actix_web;
 
+use actix_cors::Cors;
 use std::env::var;
 
+use actix_web::middleware::Logger;
 use actix_web::web::{Data, ServiceConfig};
 use actix_web::{App, HttpServer};
 use dotenv::dotenv;
@@ -9,8 +11,9 @@ use env_logger::init_from_env;
 
 mod health;
 
-struct AppState {
-    app_name: String,
+pub struct AppState {
+    pub app_name: String,
+    pub pool: database::PgPool,
 }
 
 pub async fn server(name: &str, routes: fn(&mut ServiceConfig)) -> std::io::Result<()> {
@@ -21,16 +24,16 @@ pub async fn server(name: &str, routes: fn(&mut ServiceConfig)) -> std::io::Resu
 
     let app_data = Data::new(AppState {
         app_name: name.to_string(),
+        pool: database::create_pool(name),
     });
-
-    let database = database::create_pool(name);
 
     log::info!("Starting server");
 
     HttpServer::new(move || {
         App::new()
             .app_data(app_data.clone())
-            .app_data(database.clone())
+            .wrap(Logger::default())
+            .wrap(Cors::permissive())
             .service(health::health_state)
             .configure(routes)
     })
@@ -47,7 +50,7 @@ fn bind_v4() -> String {
 }
 
 fn bind_v6() -> String {
-    let bind = var("IPV6").unwrap_or_else(|_| "[::1]:9000".to_string());
+    let bind = var("IPV6").unwrap_or_else(|_| "[::1]:8080".to_string());
     log::info!("Binding to {}", bind);
     bind
 }

@@ -3,7 +3,7 @@ use std::error::Error;
 use postgres::Row;
 use postgres_from_row::FromRow;
 
-use database::PgPool;
+use database::{get_error_code, PgPool};
 
 use crate::models::{Branch, Request, Search, Update};
 use crate::utils::rows_to_branches;
@@ -16,7 +16,7 @@ pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Branch>, Box<
         || search.limit.is_some()
         || search.offset.is_some()
     {
-        let mut query = "SELECT * FROM branches_view".to_string();
+        let mut query = "SELECT * FROM branch_view".to_string();
         let mut count = 1;
 
         if search.name.is_some() || search.address.is_some() {
@@ -52,7 +52,7 @@ pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Branch>, Box<
     } else {
         conn.interact(|client| {
             client
-                .query("SELECT * FROM branches_view;", &[])
+                .query("SELECT * FROM branch_view;", &[])
                 .map(|rows: Vec<Row>| rows_to_branches(rows))
         })
         .await?
@@ -68,7 +68,7 @@ pub async fn get(pool: &PgPool, id: i32) -> Result<Branch, Box<dyn Error>> {
     let branch = conn
         .interact(move |client| {
             client
-                .query_one("SELECT * FROM branches_view WHERE id = $1;", &[&id])
+                .query_one("SELECT * FROM branch_view WHERE id = $1;", &[&id])
                 .map(|row| Branch::from_row(&row))
         })
         .await?;
@@ -78,29 +78,32 @@ pub async fn get(pool: &PgPool, id: i32) -> Result<Branch, Box<dyn Error>> {
     }
 }
 
-pub async fn create(pool: &PgPool, request: Request) -> Result<Branch, Box<dyn Error>> {
+pub async fn create(pool: &PgPool, request: Request) -> Result<String, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
     let branch = conn
         .interact(move |client| {
-            client
-                .query_one(
-                    "SELECT * FROM fn_create_branch($1, $2);",
-                    &[&request.name, &request.address],
-                )
-                .map(|row| Branch::from_row(&row))
+            client.query_one(
+                "CALL add_branch($1, $2);",
+                &[&request.name, &request.address],
+            )
         })
         .await?;
-    match branch {
-        Ok(branch) => Ok(branch),
-        Err(err) => Err(Box::new(err)),
+
+    if branch.is_err() {
+        if get_error_code(&branch.err().unwrap()) == 23505 {
+            log::info!("Branch already exists");
+            return Ok("Branch already exists".to_string());
+        }
     }
+
+    return Ok("Branch created".to_string());
 }
 
 pub async fn update(pool: &PgPool, id: i32, update: Update) -> Result<Branch, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
     let branch = conn
         .interact(move |client| {
-            let mut query = "UPDATE branches SET".to_string();
+            let mut query = "UPDATE branch SET".to_string();
             let mut count = 1;
 
             if let Some(name) = &update.name {
@@ -137,7 +140,7 @@ pub async fn delete(pool: &PgPool, id: i32) -> Result<Branch, Box<dyn Error>> {
     let branch = conn
         .interact(move |client| {
             client
-                .query_one("DELETE FROM branches WHERE id = $1 RETURNING *;", &[&id])
+                .query_one("DELETE FROM branch WHERE id = $1 RETURNING *;", &[&id])
                 .map(|row| Branch::from_row(&row))
         })
         .await?;

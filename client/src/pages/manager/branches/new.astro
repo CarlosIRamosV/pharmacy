@@ -21,21 +21,20 @@ import NavbarManager from "../../../components/NavbarManager.astro";
     const name = document.querySelector("#name").value;
     const address = document.querySelector("#address").value;
 
-    console.log(JSON.stringify({ name, address }));
-
     //const response = await fetch('/api/branches', {
-    const response = await fetch("http://localhost/api/branches", {
+    const response = await fetch("http://localhost:8080", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ name, address }),
     });
-    if (response.ok) {
-      alert("Sucursal creada correctamente");
-      window.location.href = "./";
-    } else {
-      alert("Error al crear la sucursal");
-    }
+    response.json().then((data) => {
+      if (response.ok) {
+        alert("Sucursal creada correctamente");
+      } else {
+        alert("Se ha producido el siguiente error: " + data.message);
+      }
+    });
   });
 </script>
