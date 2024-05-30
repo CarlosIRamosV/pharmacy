@@ -1,4 +1,7 @@
 # Proyecto final
+> [!NOTE]  
+> El mirror se ejecuta en un contenedor de Docker y se inicia al momento de crear el contenedor.
+
 **Materia:** Administración de base de datos  
 **Docente:** César David Sáenz  
 **Equipo:** Red Hat Data Grid  
@@ -7,11 +10,18 @@ El siguiente proyecto trata sobre un punto de venta para una farmacia. Este proy
 
 ## Tecnologías:
 - Docker
-- Astro
 - Postgres DB
-
-El mirror se inicia al momento de crear el contenedor.
+- Rust con el framework [Actix](https://actix.rs/)
+- Node.js con el framework [Astro](https://astro.build/)
 
 ## Comandos:
-- `docker compose up` - sobre la carpeta raíz
-- `npm run dev` - sobre la carpeta client
+### Docker
+Para iniciar el proyecto se debe correr el siguiente comando:
+```bash
+docker compose up
+```
+
+Para detener el proyecto se debe correr el siguiente comando:
+```bash
+docker compose down
+```
