@@ -22,7 +22,7 @@ import NavbarManager from "../../../components/NavbarManager.astro";
     const address = document.querySelector("#address").value;
 
     //const response = await fetch('/api/branches', {
-    const response = await fetch("http://localhost:8080", {
+    const response = await fetch("http://localhost/api/branches", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
