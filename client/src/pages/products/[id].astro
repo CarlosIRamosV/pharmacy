@@ -6,33 +6,14 @@ const { id } = Astro.params;
 
 <Layout title="Product">
   <Navbar />
-  <!-- 
-  <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white text-center">Product</h1>
-  <div>
-    <h2 id="product-name">Product Name</h2>
-    <p id="product-description">Product Description</p>
-    <p id="product-price">Product Price</p>
-    <img
-      src=""
-      id="product-image"
-      alt="Product Image"
-      width="200"
-      height="200"
-    />
-
-    <p id="product-id">{{ id }}</p>
-  </div>
--->
   <div class="flex justify-center items-center h-screen">
     <div class="flex justify-center items-center">
       <div
         class="w-full max-w-sm bg-gray-100 border border-blue-500 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
       >
         <a href="#">
-          <p id="product-id" class="pl-2 text-l font-semibold dark:text-white">
-            {{ id }}
-          </p>
           <img
+            id="image"
             class="p-8 rounded-t-lg mx-auto"
             src=""
             alt="product image"
@@ -75,10 +56,10 @@ const { id } = Astro.params;
       document.getElementById("product-name").innerText = data.name;
       document.getElementById("product-description").innerText =
         data.description;
+      document.getElementById("image").src = data.image? data.image : "https://via.placeholder.com/150";
       document.getElementById("product-price").innerText = data.price;
       document.getElementById("product-id").innerText = data.id;
-      document.getElementById("product-image").src =
-        "https://via.placeholder.com/150";
       document.getElementById("product-image").alt = data.name;
+      console.log(data);
     });
 </script>

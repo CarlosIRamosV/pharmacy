@@ -51,9 +51,9 @@ async fn new(data: Data<AppState>, request: Json<Request>) -> HttpResponse {
 }
 
 #[get("/{id}")]
-async fn get(data: Data<AppState>, id: Path<i32>) -> Result<Json<Product>, actix_web::Error> {
+async fn get(data: Data<AppState>, id: Path<i32>) -> Result<Json<Public>, actix_web::Error> {
     let element = actions::get(&data.pool, id.into_inner()).await?;
-    Ok(Json(element))
+    Ok(Json(element.to_public()))
 }
 
 #[put("/{id}")]

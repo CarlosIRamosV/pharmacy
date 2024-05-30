@@ -22,8 +22,8 @@ import Navbar from "../../components/Navbar.astro";
         div.innerHTML = `
             <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
     <a href="#">
-        <img class="p-8 rounded-t-lg" 
-        src="https://via.placeholder.com/150"
+        <img class="p-8 rounded-t-lg w-full h-64 object-cover object-center"
+        src="${medicine.image? medicine.image : 'https://via.placeholder.com/300'}"
         alt="${medicine.name}">
     </a>
     <div class="px-5 pb-5">
