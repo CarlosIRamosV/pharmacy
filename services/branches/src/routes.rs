@@ -1,8 +1,8 @@
 use actix_web::http::StatusCode;
 use actix_web::web::{Data, Json, Path, Query, ServiceConfig};
 use actix_web::{delete, get, post, put, HttpResponse};
-use models::Response;
 
+use models::Response;
 use server::AppState;
 
 use crate::actions;

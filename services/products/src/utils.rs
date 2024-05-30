@@ -1,5 +1,4 @@
 use postgres::Row;
-use postgres_from_row::FromRow;
 
 use crate::models::Product;
 

@@ -16,7 +16,7 @@ const id = Astro.params.id;
   >
     Id: {id}
   </p>
-  <form>
+  <form id="upload-form">
     <label
       for="name"
       class="mb-2 text-sm font-medium text-gray-900 dark:text-white ml-2"
@@ -82,6 +82,7 @@ const id = Astro.params.id;
   let name = document.getElementById("name");
   let description = document.getElementById("description");
   let price = document.getElementById("price");
+  let image = document.getElementById("image");
   fetch(`http://localhost/api/products/${id}`)
     .then((response) => response.json())
     .then((data) => {
@@ -90,26 +91,52 @@ const id = Astro.params.id;
       price.value = data.price;
     });
 
-  document.querySelector("form").addEventListener("submit", (event) => {
-    // Prevent the form from submitting
-    name = name.value;
-    description = description.value;
-    price = price.value;
+  document
+    .getElementById("upload-form")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const image = e.target.image.files[0];
 
-    event.preventDefault();
-    fetch(`http://localhost/api/products/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, description, price }),
-    }).then((response) => {
-      if (response.ok) {
-        alert("Producto actualizado");
-        window.location.href = "../";
-      } else {
-        alert("Error al actualizar el producto");
+      // check if the file selected is not an image file
+      if (!image.type.includes("image")) {
+        return alert("Only images are allowed!");
       }
+
+      // check if size (in bytes) exceeds 10 MB
+      if (image.size > 10_000_000) {
+        return alert("Maximum upload size is 10MB!");
+      }
+
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(image);
+
+      fileReader.onload = async (e) => {
+        const base64Image = e.target.result;
+        await fetch("http://localhost/api/images", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            product_id: parseInt(id),
+            image: base64Image,
+          }),
+        }).then((response) => {
+          fetch(`http://localhost/api/products/${id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, description, price }),
+          }).then((response) => {
+            if (response.ok) {
+              alert("Producto actualizado");
+              window.location.href = "../";
+            } else {
+              alert("Error al actualizar el producto");
+            }
+          });
+        });
+      };
     });
-  });
 </script>

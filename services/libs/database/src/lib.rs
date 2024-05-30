@@ -1,10 +1,11 @@
 extern crate deadpool_r2d2;
 extern crate r2d2_postgres;
 
+use std::env;
+
 use deadpool_r2d2::{Manager, Pool, Runtime};
 use r2d2_postgres::postgres::{Config, Error, NoTls};
 use r2d2_postgres::PostgresConnectionManager;
-use std::env;
 
 pub type PgManager = Manager<PostgresConnectionManager<NoTls>>;
 

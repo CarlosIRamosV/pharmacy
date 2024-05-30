@@ -45,3 +45,13 @@ GRANT INSERT, SELECT
 GRANT USAGE, SELECT
     ON SEQUENCE log.product_id_seq
     TO products_user;
+
+/* Images role */
+CREATE ROLE images_user WITH LOGIN PASSWORD 'images_password';
+GRANT INSERT, SELECT, UPDATE, DELETE
+    ON TABLE image
+    TO images_user;
+
+GRANT USAGE, SELECT
+    ON SEQUENCE image_id_seq
+    TO images_user;

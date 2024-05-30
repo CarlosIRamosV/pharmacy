@@ -6,7 +6,7 @@ COPY . .
 
 # Install musl-dev to build the binary
 RUN apk add musl-dev
-RUN cargo build --bin branches --release
+RUN cargo build --bin images --release
 
 FROM alpine:latest
 

@@ -3,7 +3,8 @@
 /* product */
 -- Trigger function
 CREATE OR REPLACE FUNCTION log.fn_product_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
         INSERT INTO log.product (action, product_id, name, description, price)
@@ -22,7 +23,8 @@ $$ LANGUAGE plpgsql;
 /* branch */
 -- Trigger function
 CREATE OR REPLACE FUNCTION log.fn_branch_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
         INSERT INTO log.branch (action, branch_id, name, address)
@@ -41,7 +43,8 @@ $$ LANGUAGE plpgsql;
 /* product_branch */
 -- Trigger function
 CREATE OR REPLACE FUNCTION log.fn_product_branch_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
         INSERT INTO log.product_branch (action, product_id, branch_id)
@@ -57,7 +60,8 @@ $$ LANGUAGE plpgsql;
 /* profile */
 -- Trigger function
 CREATE OR REPLACE FUNCTION log.fn_profile_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
         INSERT INTO log.profile (action, profile_id, first_name, last_name, email)
@@ -76,7 +80,8 @@ $$ LANGUAGE plpgsql;
 /* user */
 -- Trigger function
 CREATE OR REPLACE FUNCTION log.fn_user_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
         INSERT INTO log.user (action, user_id, profile_id, username, password)
@@ -95,7 +100,8 @@ $$ LANGUAGE plpgsql;
 /* role */
 -- Trigger function
 CREATE OR REPLACE FUNCTION log.fn_role_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
         INSERT INTO log.role (action, role_id, name)
@@ -114,7 +120,8 @@ $$ LANGUAGE plpgsql;
 /* user_role */
 -- Trigger function
 CREATE OR REPLACE FUNCTION log.fn_user_role_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
         INSERT INTO log.user_role (action, user_id, role_id)
@@ -130,7 +137,8 @@ $$ LANGUAGE plpgsql;
 /* order */
 -- Trigger function
 CREATE OR REPLACE FUNCTION log.fn_order_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
         INSERT INTO log.order (action, order_id, user_id, branch_id, total)
@@ -148,7 +156,8 @@ $$ LANGUAGE plpgsql;
 
 -- Calculate the total of the order
 CREATE OR REPLACE FUNCTION fn_order_total_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     NEW.total = (SELECT SUM(total) FROM order_product WHERE order_id = NEW.id);
     RETURN NEW;
@@ -158,7 +167,8 @@ $$ LANGUAGE plpgsql;
 /* order_product */
 -- Trigger function
 CREATE OR REPLACE FUNCTION log.fn_order_product_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     IF (TG_OP = 'INSERT') THEN
         INSERT INTO log.order_product (action, order_id, product_id, quantity, total)
@@ -176,7 +186,8 @@ $$ LANGUAGE plpgsql;
 
 -- Calculate the total of the order product
 CREATE OR REPLACE FUNCTION fn_order_product_total_trigger()
-RETURNS TRIGGER AS $$
+    RETURNS TRIGGER AS
+$$
 BEGIN
     NEW.total = NEW.quantity * (SELECT price FROM product WHERE id = NEW.product_id);
     RETURN NEW;
@@ -185,7 +196,8 @@ $$ LANGUAGE plpgsql;
 
 -- Get the total of the order in the branch
 CREATE OR REPLACE FUNCTION fn_get_order_total(p_branch_id INT)
-RETURNS DECIMAL AS $$
+    RETURNS DECIMAL AS
+$$
 DECLARE
     v_total DECIMAL;
 BEGIN
@@ -200,7 +212,8 @@ $$ LANGUAGE plpgsql;
 
 -- Get Total sales of the product in the branch
 CREATE OR REPLACE FUNCTION fn_get_product_total_sales(p_product_id INT, p_branch_id INT)
-RETURNS DECIMAL AS $$
+    RETURNS DECIMAL AS
+$$
 DECLARE
     v_total DECIMAL;
 BEGIN

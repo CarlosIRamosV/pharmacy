@@ -19,15 +19,18 @@ services:
       - "80:80"
     depends_on:
       client:
-          condition: service_healthy
+        condition: service_healthy
       branches:
-          condition: service_healthy
+        condition: service_healthy
       products:
-          condition: service_healthy
+        condition: service_healthy
+      images:
+        condition: service_healthy
     links:
       - branches
       - client
       - products
+      - images
 
   database_master:
     image: postgres:alpine
@@ -107,12 +110,33 @@ services:
       database_master:
         condition: service_healthy
     healthcheck:
-        test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+    links:
+      - database_master
+
+  images:
+    container_name: Images
+    build:
+      context: .
+      dockerfile: services/images/Dockerfile
+    image: pharmacy/images:latest
+    restart: always
+    environment:
+      PG_HOST: database_master
+      PG_USER: images_user
+      PG_PASSWORD: images_password
+      PG_DBNAME: pharmacy
+      IPV4: 0.0.0.0:8080
+    depends_on:
+      database_master:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
     links:
       - database_master
 
 volumes:
-    master_data:
-      name: master_data
-    save_data:
-        name: save_data
+  master_data:
+    name: master_data
+  save_data:
+    name: save_data

@@ -1,8 +1,8 @@
 extern crate actix_web;
 
-use actix_cors::Cors;
 use std::env::var;
 
+use actix_cors::Cors;
 use actix_web::middleware::Logger;
 use actix_web::web::{Data, ServiceConfig};
 use actix_web::{App, HttpServer};

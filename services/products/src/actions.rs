@@ -1,9 +1,8 @@
 use std::error::Error;
 
 use postgres::Row;
-use postgres_from_row::FromRow;
 
-use database::PgPool;
+use database::{get_error_code, PgPool};
 
 use crate::models::{Product, Request, Search, Update};
 use crate::utils::rows_to_products;
@@ -18,7 +17,7 @@ pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box
         || search.limit.is_some()
         || search.offset.is_some()
     {
-        let mut query = "SELECT * FROM products_view".to_string();
+        let mut query = "SELECT * FROM product_view".to_string();
         let mut count = 1;
 
         if search.name.is_some()
@@ -74,7 +73,7 @@ pub async fn get_all(pool: &PgPool, search: &Search) -> Result<Vec<Product>, Box
     } else {
         conn.interact(|client| {
             client
-                .query("SELECT * FROM products_view;", &[])
+                .query("SELECT * FROM product_view;", &[])
                 .map(|rows: Vec<Row>| rows_to_products(rows))
         })
         .await?
@@ -90,7 +89,7 @@ pub async fn get(pool: &PgPool, id: i32) -> Result<Product, Box<dyn Error>> {
     let product = conn
         .interact(move |client| {
             client
-                .query_one("SELECT * FROM products_view WHERE id = $1;", &[&id])
+                .query_one("SELECT * FROM product_view WHERE id = $1;", &[&id])
                 .map(|row| Product::from_row(&row))
         })
         .await?;
@@ -100,29 +99,31 @@ pub async fn get(pool: &PgPool, id: i32) -> Result<Product, Box<dyn Error>> {
     }
 }
 
-pub async fn create(pool: &PgPool, request: Request) -> Result<Product, Box<dyn Error>> {
+pub async fn create(pool: &PgPool, request: Request) -> Result<String, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
     let product = conn
         .interact(move |client| {
-            client
-                .query_one(
-                    "SELECT * FROM fn_create_product($1, $2, $3);",
-                    &[&request.name, &request.description, &request.price],
-                )
-                .map(|row| Product::from_row(&row))
+            client.query_one(
+                "CALL add_product($1, $2, $3);",
+                &[&request.name, &request.description, &request.price],
+            )
         })
         .await?;
-    match product {
-        Ok(product) => Ok(product),
-        Err(err) => Err(Box::new(err)),
+    if product.is_err() {
+        if get_error_code(&product.err().unwrap()) == 23505 {
+            log::info!("Product already exists");
+            return Ok("Product already exists".to_string());
+        }
     }
+
+    return Ok("Product created".to_string());
 }
 
-pub async fn update(pool: &PgPool, id: i32, update: Update) -> Result<Product, Box<dyn Error>> {
+pub async fn update(pool: &PgPool, id: i32, update: Update) -> Result<String, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
     let product = conn
         .interact(move |client| {
-            let mut query = "UPDATE products SET".to_string();
+            let mut query = "UPDATE product SET".to_string();
             let mut count = 1;
 
             if let Some(name) = &update.name {
@@ -143,36 +144,38 @@ pub async fn update(pool: &PgPool, id: i32, update: Update) -> Result<Product, B
                     query.push_str(",");
                 }
                 query.push_str(&format!(" price = {}", price));
+                count += 1;
             }
 
-            query.push_str(", updated_at = now()");
+            if count > 1 {
+                query.push_str(",");
+            }
 
-            query.push_str(&format!(" WHERE id = {}", id));
+            query.push_str(" updated_at = now()");
 
-            query.push_str(" RETURNING *;");
+            query.push_str(&format!(" WHERE id = {};", id));
 
-            client
-                .query_one(&query, &[])
-                .map(|row| Product::from_row(&row))
+            client.query_one(&query, &[])
         })
-        .await?;
-    match product {
-        Ok(product) => Ok(product),
-        Err(err) => Err(Box::new(err)),
-    }
+        .await
+        .unwrap();
+
+    log::info!(
+        "Product updated {:?}",
+        get_error_code(&product.err().unwrap())
+    );
+    Ok("Product updated".to_string())
 }
 
-pub async fn delete(pool: &PgPool, id: i32) -> Result<Product, Box<dyn Error>> {
+pub async fn delete(pool: &PgPool, id: i32) -> Result<String, Box<dyn Error>> {
     let conn = pool.get().await.unwrap();
     let product = conn
-        .interact(move |client| {
-            client
-                .query_one("DELETE FROM products WHERE id = $1 RETURNING *;", &[&id])
-                .map(|row| Product::from_row(&row))
-        })
-        .await?;
-    match product {
-        Ok(product) => Ok(product),
-        Err(err) => Err(Box::new(err)),
-    }
+        .interact(move |client| client.query_one("DELETE FROM product WHERE id = $1;", &[&id]))
+        .await
+        .unwrap();
+    log::info!(
+        "Product deleted {:?}",
+        get_error_code(&product.err().unwrap())
+    );
+    Ok("Product deleted".to_string())
 }
